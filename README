@@ -1,0 +1,3 @@
+Rhubarb is a 'project' 3d engine I've been working on.
+
+Its aim is to use OpenGL 3.0 as fully as possible, without deprecated features and unnecessary bloat.
