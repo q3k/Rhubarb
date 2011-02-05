@@ -42,6 +42,8 @@ namespace rb
 			
 			//Get combined matrix (to feed to a shader)
 			GLfloat *GetMVP(void);
+			GLfloat *GetMV(void);
+			GLfloat *GetP(void);
 		private:
 			float *m_StackBottom;
 			float *m_StackPointer;

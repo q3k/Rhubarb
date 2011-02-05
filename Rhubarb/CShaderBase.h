@@ -12,6 +12,7 @@ namespace rb
 			CShaderBase(void);
 			~CShaderBase(void);
 
+			void Initialize(void);
 		protected:
 			void CompileAndLink();
 			void ReadSource(const char *VertexFile, const char *FragmentFile);
@@ -21,7 +22,8 @@ namespace rb
 
 			GLuint m_Program;
 
-		private:
+			virtual void InitializeAttributes(void) = 0;	
+
 			void LoadShader(const char *Source, GLuint Shader);
 			void CompileShader(GLuint Shader);
 	};

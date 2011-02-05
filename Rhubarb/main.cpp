@@ -1,7 +1,10 @@
 #include <iostream>
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glut.h>
+
+#include "CPhongShader.h"
 #include "CFlatShader.h"
 #include "CTriangleMesh.h"
 #include "CMatrix44.h"
@@ -11,49 +14,10 @@
 
 #define DegToRad(x)	((x)*0.017453292519943296f)
 
-rb::CFlatShader gCubeShader;
+rb::CPhongShader gCubeShader;
 rb::CTriangleMesh gCube;
 rb::CMatrixManager gManager;
 rb::CCamera gCamera;
-
-float gCubeSize = 0.25f;
-rb::CVector4 gCubeData[] = {
-	rb::CVector4(-gCubeSize, -gCubeSize, 0.0f),
-	rb::CVector4(gCubeSize, -gCubeSize, 0.0f),
-	rb::CVector4(gCubeSize, gCubeSize, 0.0f),
-
-	rb::CVector4(-gCubeSize, -gCubeSize, 0.0f),
-	rb::CVector4(gCubeSize, gCubeSize, 0.0f),
-	rb::CVector4(-gCubeSize, gCubeSize, 0.0f)
-};
-/*float gCubeVertices[] = {
-		-gCubeSize, -gCubeSize, 0.0f,
-		gCubeSize, -gCubeSize, 0.0f,
-		gCubeSize, gCubeSize, 0.0f,
-		-gCubeSize, gCubeSize, 0.0f
-	};*/
-
-void fnSpecialKeys(int Key, int X, int Y)
-{
-	float Linear = 0.1f;
-	float Angular = DegToRad(1.0f);
-
-	switch (Key)
-	{
-		case GLUT_KEY_UP:
-			gCamera.MoveForward(Linear);
-			break;
-		case GLUT_KEY_DOWN:
-			gCamera.MoveForward(-Linear);
-			break;
-		case GLUT_KEY_LEFT:
-			gCamera.RotateWorld(Angular, 0.0f, 1.0f, 0.0f);
-			break;
-		case GLUT_KEY_RIGHT:
-			gCamera.RotateWorld(-Angular, 0.0f, 1.0f, 0.0f);
-			break;
-	}		
-}
 
 void fnChangeSize(int Width, int Height)
 {
@@ -70,16 +34,13 @@ void fnRenderScene(void)
 
 	float Red [] = {1.0f, 0.0f, 0.0f, 1.0f};
 
-	//Camera
 	gManager.Push(gCamera);
-
 		gManager.Push();
 			gManager.Scale(0.5f, 0.5f, 0.5f);
 			gManager.Rotate(DegToRad(Rotation), 0.0f, 1.0f, 0.0f);
-			gCubeShader.Use(Red, gManager.GetMVP());
+			gCubeShader.Use(Red, gManager.GetMV(), gManager.GetP(), rb::CVector4());
 			gCube.Draw();
 		gManager.Pop();
-
 	gManager.Pop();
 
 	glutSwapBuffers();
@@ -88,15 +49,12 @@ void fnRenderScene(void)
 
 int main(int argc, char **argv)
 {
-	rb::CMatrix44 *Matrix = new rb::CMatrix44();
-
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL);
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("Rhubarb");
 	glutReshapeFunc(fnChangeSize);
 	glutDisplayFunc(fnRenderScene);
-	glutSpecialFunc(fnSpecialKeys);
 
 	GLenum Error = glewInit();
 	if (Error != GLEW_OK)
@@ -107,7 +65,6 @@ int main(int argc, char **argv)
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	gCubeShader.Initialize();
 

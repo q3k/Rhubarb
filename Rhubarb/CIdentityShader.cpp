@@ -26,10 +26,8 @@ CIdentityShader::CIdentityShader(void)
 	strncpy_s(m_FragmentSource, RB_SHADER_MAX_SIZE, FragmentSource.c_str(), FragmentSource.length());
 }
 
-void CIdentityShader::Initialize(void)
+void CIdentityShader::InitializeAttributes(void)
 {
-	CompileAndLink();
-
 	glBindAttribLocation(m_Program, 0, "vVertex");
 }
 

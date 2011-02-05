@@ -11,7 +11,7 @@ namespace rb
 			CFlatShader(void);
 			~CFlatShader(void);
 
-			void Initialize(void);
+			virtual void InitializeAttributes(void);
 
 			virtual void Use(float *Color, GLfloat *Matrix);
 	};

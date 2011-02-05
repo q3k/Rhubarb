@@ -128,6 +128,16 @@ GLfloat *CMatrixManager::GetMVP(void)
 	return (GLfloat *)m_MVPMatrix;
 }
 
+GLfloat *CMatrixManager::GetMV(void)
+{
+	return m_StackPointer - 16;
+}
+
+GLfloat *CMatrixManager::GetP(void)
+{
+	return m_ProjectionMatrix->m_Data;
+}
+
 CMatrixManager::~CMatrixManager(void)
 {
 	delete [] m_StackBottom;

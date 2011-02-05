@@ -19,10 +19,8 @@ CFlatShader::CFlatShader(void)
 	strncpy_s(m_FragmentSource, RB_SHADER_MAX_SIZE, FragmentSource.c_str(), FragmentSource.length());
 }
 
-void CFlatShader::Initialize(void)
+void CFlatShader::InitializeAttributes(void)
 {
-	CompileAndLink();
-
 	glBindAttribLocation(m_Program, 0, "vVertex");
 }
 

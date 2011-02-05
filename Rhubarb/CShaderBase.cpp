@@ -48,7 +48,7 @@ void CShaderBase::CompileShader(GLuint Shader)
     assert(Test != GL_FALSE);
 }
 
-void CShaderBase::CompileAndLink(void)
+void CShaderBase::Initialize(void)
 {
 	GLuint VertexShader, FragmentShader;
 
@@ -64,6 +64,8 @@ void CShaderBase::CompileAndLink(void)
 	m_Program = glCreateProgram();
 	glAttachShader(m_Program, VertexShader);
 	glAttachShader(m_Program, FragmentShader);
+
+	InitializeAttributes();
 
 	glLinkProgram(m_Program);
 

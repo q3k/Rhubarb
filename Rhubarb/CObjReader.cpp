@@ -45,16 +45,26 @@ void CObjReader::Read(CTriangleMesh &Target)
 			m_Indices.push_back(B - 1);
 			m_Indices.push_back(C - 1);
 		}
+		else if (Keyword == "vn")
+		{
+			GLfloat X, Y, Z;
+			File >> X >> Y >> Z;
+
+			m_Normals.push_back(X);
+			m_Normals.push_back(Y);
+			m_Normals.push_back(Z);
+		}
 		else
 			std::getline(File, Line);
 	}
 
-	int NumFloats = m_Vertices.size();
-	int NumShorts = m_Indices.size();
+	int VertexBufferSize = m_Vertices.size();
+	int IndexBufferSize = m_Indices.size();
+	int NormalBufferSize = m_Normals.size();
 
-	std::cout << "CObjReader: Read " << NumFloats / 3 << " vertices and " << NumShorts / 3 << " faces." << std::endl;
+	std::cout << "CObjReader: Read " << VertexBufferSize / 3 << " vertices and " << IndexBufferSize / 3 << " faces." << std::endl;
 
-	Target.ReadLists(&m_Indices[0], NumShorts, &m_Vertices[0], NumFloats);
+	Target.ReadLists(&m_Indices[0], IndexBufferSize, &m_Vertices[0], VertexBufferSize, &m_Normals[0]);
 }
 
 CObjReader::~CObjReader(void)

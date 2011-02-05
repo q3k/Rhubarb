@@ -63,6 +63,9 @@
     <ClCompile Include="CObjReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPhongShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMatrix44.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="CObjReader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPhongShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
