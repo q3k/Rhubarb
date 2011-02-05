@@ -13,9 +13,13 @@ namespace rb
 			CTriangleMesh(void);
 			~CTriangleMesh(void);
 
+			//Automatic detection of duplicate vertices, immediate mode
 			void Begin(GLint NumberVertices);
 			void AddTriangle(CVector4 Vertices[3]);
 			void End(void);
+
+			//Direct index and vertex list
+			void ReadLists(GLushort *Indices, GLuint NumberIndices, GLfloat *Vertices, GLuint NumberVertices);
 
 			void Draw(void);
 		private:

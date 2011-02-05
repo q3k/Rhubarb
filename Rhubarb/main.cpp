@@ -7,6 +7,7 @@
 #include "CMatrix44.h"
 #include "CMatrixManager.h"
 #include "CCamera.h"
+#include "CObjReader.h"
 
 #define DegToRad(x)	((x)*0.017453292519943296f)
 
@@ -57,7 +58,7 @@ void fnSpecialKeys(int Key, int X, int Y)
 void fnChangeSize(int Width, int Height)
 {
 	glViewport(0, 0, Width, Height);
-	gManager.SetPerspective(DegToRad(35.0f), float(Width)/float(Height), 1.0f, 100.0f);
+	gManager.SetPerspective(DegToRad(35.0f), float(Width)/float(Height), 1.0f, 1000.0f);
 }
 
 void fnRenderScene(void)
@@ -72,18 +73,9 @@ void fnRenderScene(void)
 	//Camera
 	gManager.Push(gCamera);
 
-		//Rectangle near
 		gManager.Push();
-			gManager.Translate(sinf(DegToRad(Rotation)), 0.0f, -2.0f);
-			gManager.Rotate(DegToRad(Rotation), 0.0f, 0.0f, 1.0f);
-			gCubeShader.Use(Red, gManager.GetMVP());
-			gCube.Draw();
-		gManager.Pop();
-
-		//Rectangle far
-		gManager.Push();
-			gManager.Translate(cosf(DegToRad(Rotation)), 0.0f, -4.0f);
-			gManager.Rotate(-DegToRad(Rotation), 0.0f, 0.0f, 1.0f);
+			gManager.Scale(0.5f, 0.5f, 0.5f);
+			gManager.Rotate(DegToRad(Rotation), 0.0f, 1.0f, 0.0f);
 			gCubeShader.Use(Red, gManager.GetMVP());
 			gCube.Draw();
 		gManager.Pop();
@@ -115,17 +107,15 @@ int main(int argc, char **argv)
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	gCubeShader.Initialize();
 
-	gCube.Begin(6);
-	gCube.AddTriangle(gCubeData);
-	gCube.AddTriangle(gCubeData + 3);
-	gCube.End();
+	rb::CObjReader Reader("teapot.obj");
+	Reader.Read(gCube);
 
-	gCamera.SetPosition(0.0f, 0.0f, 0.0f);
-	//gCamera.LookAt(rb::CVector4(0.0f, 0.0f, -2.0f));
+	gCamera.SetPosition(0.0f, 60.0f, 100.0f);
+	gCamera.LookAt(rb::CVector4(0.0f, 0.0f, 0.0f));
 
 	glutMainLoop();
 }

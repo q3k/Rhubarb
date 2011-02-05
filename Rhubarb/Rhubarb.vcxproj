@@ -80,6 +80,7 @@
     <ClInclude Include="CMatrix44.h" />
     <ClInclude Include="CMatrixManager.h" />
     <ClInclude Include="CMesh.h" />
+    <ClInclude Include="CObjReader.h" />
     <ClInclude Include="CShaderBase.h" />
     <ClInclude Include="CTriangleMesh.h" />
     <ClInclude Include="CVector4.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="CMatrix44.cpp" />
     <ClCompile Include="CMatrixManager.cpp" />
     <ClCompile Include="CMesh.cpp" />
+    <ClCompile Include="CObjReader.cpp" />
     <ClCompile Include="CShaderBase.cpp" />
     <ClCompile Include="CTriangleMesh.cpp" />
     <ClCompile Include="CVector4.cpp" />

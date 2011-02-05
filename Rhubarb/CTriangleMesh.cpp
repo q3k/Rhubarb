@@ -22,6 +22,8 @@ void CTriangleMesh::Begin(GLint NumberVertices)
 	m_CurrentIndex = 0;
 	m_CurrentVertex = 0;
 
+	m_VertexObject = 0;
+
 	m_Indices = new GLushort[m_Maximum];
 	m_Vertices = new GLfloat[m_Maximum * 3];
 }
@@ -105,9 +107,33 @@ void CTriangleMesh::End(void)
 
 void CTriangleMesh::Draw(void)
 {
+	if (m_VertexObject)
+	{
+		glBindVertexArray(m_VertexObject);
+		glDrawElements(GL_TRIANGLES, m_CurrentIndex, GL_UNSIGNED_SHORT, 0);
+		glBindVertexArray(0);
+	}
+}
+
+void CTriangleMesh::ReadLists(GLushort *Indices, GLuint NumberIndices, GLfloat *Vertices, GLuint NumberVertices)
+{
+	glGenVertexArrays(1, &m_VertexObject);
 	glBindVertexArray(m_VertexObject);
-	glDrawElements(GL_TRIANGLES, m_CurrentIndex, GL_UNSIGNED_SHORT, 0);
+
+	glGenBuffers(1, &m_VertexArray);
+	glGenBuffers(1, &m_IndexArray);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_VertexArray);
+	glEnableVertexAttribArray(0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * NumberVertices, Vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexArray);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * NumberIndices, Indices, GL_STATIC_DRAW);
+
 	glBindVertexArray(0);
+
+	m_CurrentIndex = NumberIndices;
 }
 
 CTriangleMesh::~CTriangleMesh(void)
