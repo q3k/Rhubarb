@@ -11,9 +11,9 @@ namespace rb
 			~CMesh(void);
 
 			//Raw access mode (a.k.a. FEED ME FLOATS)
-			void BeginRaw(GLenum Primitive, GLuint NumberVertices);
-			void EndRaw();
-			void CopyRawVertexData(float *Data);
+			void Begin(GLenum Primitive, GLuint NumberVertices);
+			void End();
+			void CopyVertexData(float *Data);
 
 			void Draw(void);
 		private:

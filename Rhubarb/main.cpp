@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "CFlatShader.h"
-#include "CMesh.h"
+#include "CTriangleMesh.h"
 #include "CMatrix44.h"
 #include "CMatrixManager.h"
 #include "CCamera.h"
@@ -11,17 +11,48 @@
 #define DegToRad(x)	((x)*0.017453292519943296f)
 
 rb::CFlatShader gCubeShader;
-rb::CMesh gCube;
+rb::CTriangleMesh gCube;
 rb::CMatrixManager gManager;
 rb::CCamera gCamera;
 
 float gCubeSize = 0.25f;
-float gCubeVertices[] = {
+rb::CVector4 gCubeData[] = {
+	rb::CVector4(-gCubeSize, -gCubeSize, 0.0f),
+	rb::CVector4(gCubeSize, -gCubeSize, 0.0f),
+	rb::CVector4(gCubeSize, gCubeSize, 0.0f),
+
+	rb::CVector4(-gCubeSize, -gCubeSize, 0.0f),
+	rb::CVector4(gCubeSize, gCubeSize, 0.0f),
+	rb::CVector4(-gCubeSize, gCubeSize, 0.0f)
+};
+/*float gCubeVertices[] = {
 		-gCubeSize, -gCubeSize, 0.0f,
 		gCubeSize, -gCubeSize, 0.0f,
 		gCubeSize, gCubeSize, 0.0f,
 		-gCubeSize, gCubeSize, 0.0f
-	};
+	};*/
+
+void fnSpecialKeys(int Key, int X, int Y)
+{
+	float Linear = 0.1f;
+	float Angular = DegToRad(1.0f);
+
+	switch (Key)
+	{
+		case GLUT_KEY_UP:
+			gCamera.MoveForward(Linear);
+			break;
+		case GLUT_KEY_DOWN:
+			gCamera.MoveForward(-Linear);
+			break;
+		case GLUT_KEY_LEFT:
+			gCamera.RotateWorld(Angular, 0.0f, 1.0f, 0.0f);
+			break;
+		case GLUT_KEY_RIGHT:
+			gCamera.RotateWorld(-Angular, 0.0f, 1.0f, 0.0f);
+			break;
+	}		
+}
 
 void fnChangeSize(int Width, int Height)
 {
@@ -39,7 +70,6 @@ void fnRenderScene(void)
 	float Red [] = {1.0f, 0.0f, 0.0f, 1.0f};
 
 	//Camera
-	//gCamera.SetPosition(0.0f, 0.0f, sinf(DegToRad(Rotation + 180) + 1.0f));
 	gManager.Push(gCamera);
 
 		//Rectangle near
@@ -74,6 +104,7 @@ int main(int argc, char **argv)
 	glutCreateWindow("Rhubarb");
 	glutReshapeFunc(fnChangeSize);
 	glutDisplayFunc(fnRenderScene);
+	glutSpecialFunc(fnSpecialKeys);
 
 	GLenum Error = glewInit();
 	if (Error != GLEW_OK)
@@ -82,16 +113,19 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	gCubeShader.Initialize();
 
-	gCube.BeginRaw(GL_TRIANGLE_FAN, 4);
-	gCube.CopyRawVertexData(gCubeVertices);
-	gCube.EndRaw();
+	gCube.Begin(6);
+	gCube.AddTriangle(gCubeData);
+	gCube.AddTriangle(gCubeData + 3);
+	gCube.End();
 
-	gCamera.SetPosition(1.0f, 2.0f, 5.0f);
-	gCamera.LookAt(rb::CVector4(0.0f, 0.0f, -2.0f));
+	gCamera.SetPosition(0.0f, 0.0f, 0.0f);
+	//gCamera.LookAt(rb::CVector4(0.0f, 0.0f, -2.0f));
 
 	glutMainLoop();
 }

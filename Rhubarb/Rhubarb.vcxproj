@@ -81,6 +81,7 @@
     <ClInclude Include="CMatrixManager.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CShaderBase.h" />
+    <ClInclude Include="CTriangleMesh.h" />
     <ClInclude Include="CVector4.h" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +93,7 @@
     <ClCompile Include="CMatrixManager.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CShaderBase.cpp" />
+    <ClCompile Include="CTriangleMesh.cpp" />
     <ClCompile Include="CVector4.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

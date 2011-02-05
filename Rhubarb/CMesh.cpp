@@ -15,7 +15,7 @@ CMesh::~CMesh(void)
 }
 
 
-void CMesh::BeginRaw(GLenum Primitive, GLuint NumberVertices)
+void CMesh::Begin(GLenum Primitive, GLuint NumberVertices)
 {
 	m_Primitive = Primitive;
 	m_NumVertices = NumberVertices;
@@ -26,14 +26,14 @@ void CMesh::BeginRaw(GLenum Primitive, GLuint NumberVertices)
 	m_BeingFed = true;
 }
 
-void CMesh::CopyRawVertexData(float *Data)
+void CMesh::CopyVertexData(float *Data)
 {
 	glGenBuffers(1, &m_VertexArray);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VertexArray);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * m_NumVertices, Data, GL_DYNAMIC_DRAW);
 }
 
-void CMesh::EndRaw(void)
+void CMesh::End(void)
 {
 	glBindVertexArray(m_VertexArrayObject);
 
