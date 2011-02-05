@@ -73,6 +73,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CEntity.h" />
     <ClInclude Include="CFlatShader.h" />
     <ClInclude Include="CIdentityShader.h" />
     <ClInclude Include="CMatrix44.h" />
@@ -82,6 +84,8 @@
     <ClInclude Include="CVector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CFlatShader.cpp" />
     <ClCompile Include="CIdentityShader.cpp" />
     <ClCompile Include="CMatrix44.cpp" />

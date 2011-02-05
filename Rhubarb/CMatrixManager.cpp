@@ -30,8 +30,21 @@ void CMatrixManager::Push(CMatrix44 &Matrix)
 	m_StackPointer += 16;
 }
 
+void CMatrixManager::Push(CCamera &Camera)
+{
+	assert(CanAllocate());
+
+	CMatrix44 CameraMatrix;
+	Camera.GetCameraMatrix(CameraMatrix);
+
+	memcpy_s(m_StackPointer, 64, CameraMatrix.m_Data, 64);
+	m_StackPointer += 16;
+}
+
 void CMatrixManager::Push(void)
 {
+	assert(CanAllocate());
+
 	CMatrix44 *OldMatrix = (CMatrix44*)(m_StackPointer - 16);
 	CMatrix44 *NewMatrix = (CMatrix44*)(m_StackPointer);
 	memcpy_s(NewMatrix, 64, OldMatrix, 64);

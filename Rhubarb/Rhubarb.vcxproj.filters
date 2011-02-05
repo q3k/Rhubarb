@@ -51,6 +51,12 @@
     <ClCompile Include="CMatrixManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMatrix44.h">
@@ -72,6 +78,12 @@
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="CMatrixManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

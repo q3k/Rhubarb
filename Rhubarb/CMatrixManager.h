@@ -4,6 +4,7 @@
 #include <GL/GL.h>
 
 #include "CMatrix44.h"
+#include "CCamera.h"
 
 namespace rb
 {
@@ -22,6 +23,8 @@ namespace rb
 			void PushIdentity();
 			//Push an existing matrix
 			void Push(CMatrix44 &Matrix);
+			//Push a Camera view
+			void Push(CCamera &Camera);
 
 			//Transform top matrix
 			void Translate(GLfloat X, GLfloat Y, GLfloat Z);

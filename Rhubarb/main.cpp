@@ -6,12 +6,14 @@
 #include "CMesh.h"
 #include "CMatrix44.h"
 #include "CMatrixManager.h"
+#include "CCamera.h"
 
 #define DegToRad(x)	((x)*0.017453292519943296f)
 
 rb::CFlatShader gCubeShader;
 rb::CMesh gCube;
 rb::CMatrixManager gManager;
+rb::CCamera gCamera;
 
 float gCubeSize = 0.25f;
 float gCubeVertices[] = {
@@ -36,19 +38,26 @@ void fnRenderScene(void)
 
 	float Red [] = {1.0f, 0.0f, 0.0f, 1.0f};
 
-	gManager.Push();
-		gManager.Translate(sinf(DegToRad(Rotation)), 0.0f, -2.0f);
-		gManager.Rotate(DegToRad(Rotation), 0.0f, 0.0f, 1.0f);
-		gCubeShader.Use(Red, gManager.GetMVP());
-		gCube.Draw();
-	gManager.Pop();
+	//Camera
+	//gCamera.SetPosition(0.0f, 0.0f, sinf(DegToRad(Rotation + 180) + 1.0f));
+	gManager.Push(gCamera);
 
+		//Rectangle near
+		gManager.Push();
+			gManager.Translate(sinf(DegToRad(Rotation)), 0.0f, -2.0f);
+			gManager.Rotate(DegToRad(Rotation), 0.0f, 0.0f, 1.0f);
+			gCubeShader.Use(Red, gManager.GetMVP());
+			gCube.Draw();
+		gManager.Pop();
 
-	gManager.Push();
-		gManager.Translate(cosf(DegToRad(Rotation)), 0.0f, -4.0f);
-		gManager.Rotate(-DegToRad(Rotation), 0.0f, 0.0f, 1.0f);
-		gCubeShader.Use(Red, gManager.GetMVP());
-		gCube.Draw();
+		//Rectangle far
+		gManager.Push();
+			gManager.Translate(cosf(DegToRad(Rotation)), 0.0f, -4.0f);
+			gManager.Rotate(-DegToRad(Rotation), 0.0f, 0.0f, 1.0f);
+			gCubeShader.Use(Red, gManager.GetMVP());
+			gCube.Draw();
+		gManager.Pop();
+
 	gManager.Pop();
 
 	glutSwapBuffers();
@@ -80,6 +89,9 @@ int main(int argc, char **argv)
 	gCube.BeginRaw(GL_TRIANGLE_FAN, 4);
 	gCube.CopyRawVertexData(gCubeVertices);
 	gCube.EndRaw();
+
+	gCamera.SetPosition(1.0f, 2.0f, 5.0f);
+	gCamera.LookAt(rb::CVector4(0.0f, 0.0f, -2.0f));
 
 	glutMainLoop();
 }

@@ -138,7 +138,7 @@ void CMatrix44::Multiply(CVector4 &Vector, CVector4 &Target)
 	#define M(col,row) m_Data[col*4+row]
 	for (int i = 0; i < 4; i++)
 	{
-		Target.m_Data[0] = M(i, 0) * Vector.m_Data[0] + M(i, 1) * Vector.m_Data[1] + M(i, 2) * Vector.m_Data[2] + M(i, 3) * Vector.m_Data[3];
+		Target.m_Data[i] = M(i, 0) * Vector.m_Data[0] + M(i, 1) * Vector.m_Data[1] + M(i, 2) * Vector.m_Data[2] + M(i, 3) * Vector.m_Data[3];
 	}
 	#undef M
 }
@@ -155,6 +155,12 @@ void CMatrix44::Column(int i, CVector4 &Target)
 {
 	for (int j = 0; j < 4; j++)
 		Target.m_Data[j] = m_Data[j + i * 4];
+}
+
+void CMatrix44::SetColumn(int i, CVector4 &Vector)
+{
+	for (int j = 0; j < 4; j++)
+		m_Data[i*4 + j] = Vector.m_Data[0];
 }
 
 CMatrix44::~CMatrix44(void)

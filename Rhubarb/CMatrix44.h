@@ -25,6 +25,8 @@ namespace rb
 			void Row(int i, CVector4 &Target);
 			void Column(int i, CVector4 &Target);
 
+			void SetColumn(int i, CVector4 &Vector);
+
 			float m_Data[16];
 	};
 }
