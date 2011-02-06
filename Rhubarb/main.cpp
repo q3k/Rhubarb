@@ -23,11 +23,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
-#include "CMatrix44.h"
-#include "CMatrixManager.h"
-#include "CCamera.h"
-#include "CTextureManager.h"
-#include "CModel.h"
+#include "Rhubarb.h"
 
 #define DegToRad(x)	((x)*0.017453292519943296f)
 
@@ -76,7 +72,7 @@ int main(int argc, char **argv)
 
 	//Begin "proper" code.
 	g_Cube.Bind(&g_TextureManager, &g_MatrixManager);
-	g_Cube.Load("cube.model");
+	g_Cube.Load("Data/cube.model");
 
 	g_Camera.SetPosition(0.0f, 4.0f, 6.0f);
 	g_Camera.LookAt(rb::CVector4(0.0f, 0.0f, 0.0f));

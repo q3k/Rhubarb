@@ -37,13 +37,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Development\SDKs\GLEW\include;C:\Development\SDKs\freeglut\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\SDKs\GLEW\include;C:\Development\SDKs\freeglut\include;$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>C:\Development\SDKs\GLEW\lib;C:\Development\SDKs\freeglut\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Development\SDKs\GLEW\include;C:\Development\SDKs\freeglut\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Development\SDKs\GLEW\include;C:\Development\SDKs\freeglut\include;$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>C:\Development\SDKs\GLEW\lib;C:\Development\SDKs\freeglut\lib;$(LibraryPath)</LibraryPath>
@@ -73,38 +73,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CCamera.h" />
-    <ClInclude Include="CDLShader.h" />
-    <ClInclude Include="CEntity.h" />
-    <ClInclude Include="CFlatShader.h" />
-    <ClInclude Include="CIdentityShader.h" />
-    <ClInclude Include="CMatrix44.h" />
-    <ClInclude Include="CMatrixManager.h" />
-    <ClInclude Include="CMesh.h" />
-    <ClInclude Include="CModel.h" />
-    <ClInclude Include="CObjReader.h" />
-    <ClInclude Include="CPhongShader.h" />
-    <ClInclude Include="CShaderBase.h" />
-    <ClInclude Include="CTextureManager.h" />
-    <ClInclude Include="CTriangleMesh.h" />
-    <ClInclude Include="CVector4.h" />
+    <ClInclude Include="Core\CCamera.h" />
+    <ClInclude Include="Rhubarb.h" />
+    <ClInclude Include="Shaders\CDLShader.h" />
+    <ClInclude Include="Core\CEntity.h" />
+    <ClInclude Include="Shaders\CFlatShader.h" />
+    <ClInclude Include="Shaders\CIdentityShader.h" />
+    <ClInclude Include="Math\CMatrix44.h" />
+    <ClInclude Include="Helpers\CMatrixManager.h" />
+    <ClInclude Include="Core\CMesh.h" />
+    <ClInclude Include="Core\CModel.h" />
+    <ClInclude Include="Helpers\CObjReader.h" />
+    <ClInclude Include="Shaders\CPhongShader.h" />
+    <ClInclude Include="Shaders\CShaderBase.h" />
+    <ClInclude Include="Helpers\CTextureManager.h" />
+    <ClInclude Include="Core\CTriangleMesh.h" />
+    <ClInclude Include="Math\CVector4.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CCamera.cpp" />
-    <ClCompile Include="CDLShader.cpp" />
-    <ClCompile Include="CEntity.cpp" />
-    <ClCompile Include="CFlatShader.cpp" />
-    <ClCompile Include="CIdentityShader.cpp" />
-    <ClCompile Include="CMatrix44.cpp" />
-    <ClCompile Include="CMatrixManager.cpp" />
-    <ClCompile Include="CMesh.cpp" />
-    <ClCompile Include="CModel.cpp" />
-    <ClCompile Include="CObjReader.cpp" />
-    <ClCompile Include="CPhongShader.cpp" />
-    <ClCompile Include="CShaderBase.cpp" />
-    <ClCompile Include="CTextureManager.cpp" />
-    <ClCompile Include="CTriangleMesh.cpp" />
-    <ClCompile Include="CVector4.cpp" />
+    <ClCompile Include="Core\CCamera.cpp" />
+    <ClCompile Include="Shaders\CDLShader.cpp" />
+    <ClCompile Include="Core\CEntity.cpp" />
+    <ClCompile Include="Shaders\CFlatShader.cpp" />
+    <ClCompile Include="Shaders\CIdentityShader.cpp" />
+    <ClCompile Include="Math\CMatrix44.cpp" />
+    <ClCompile Include="Helpers\CMatrixManager.cpp" />
+    <ClCompile Include="Core\CMesh.cpp" />
+    <ClCompile Include="Core\CModel.cpp" />
+    <ClCompile Include="Helpers\CObjReader.cpp" />
+    <ClCompile Include="Shaders\CPhongShader.cpp" />
+    <ClCompile Include="Shaders\CShaderBase.cpp" />
+    <ClCompile Include="Helpers\CTextureManager.cpp" />
+    <ClCompile Include="Core\CTriangleMesh.cpp" />
+    <ClCompile Include="Math\CVector4.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,0 +1,16 @@
+# This is how comments look like (notice the space at the beggining!).
+
+# Name of model
+name TexturedCube
+
+# Name of vertex shader
+vertex Data/texturedphong.v.glsl
+
+# Name of fragment shader
+fragment Data/texturedphong.f.glsl
+
+# Name of mesh
+mesh Data/cube.obj
+
+# Name of texture
+texture Data/cube.tga
