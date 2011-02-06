@@ -1,3 +1,22 @@
+/***********************************************************************
+**
+** This file is part of Rhubarb.
+** 
+** Rhubarb is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+** 
+** Rhubarb is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with Rhubarb.  If not, see <http://www.gnu.org/licenses/>.
+**
+************************************************************************/
+
 #include <assert.h>
 #include <string.h>
 
@@ -17,7 +36,9 @@ CMatrixManager::CMatrixManager(unsigned int StackSize)
 
 void CMatrixManager::PushIdentity(void)
 {
-	assert(CanAllocate());
+	if (!CanAllocate())
+		throw Exception::MatrixManagerException("Not enough space on the matrix stack! Go slap a programmer.");
+
 	CMatrix44 *Matrix = (CMatrix44*)m_StackPointer;
 	Matrix->Identity();
 	m_StackPointer += 16;
@@ -25,14 +46,26 @@ void CMatrixManager::PushIdentity(void)
 
 void CMatrixManager::Push(CMatrix44 &Matrix)
 {
-	assert(CanAllocate());
+	if (!CanAllocate())
+		throw Exception::MatrixManagerException("Not enough space on the matrix stack! Go slap a programmer.");
+
 	memcpy_s(m_StackPointer, 64, Matrix.m_Data, 64);
+	m_StackPointer += 16;
+}
+
+void CMatrixManager::Push(const GLfloat *Matrix)
+{
+	if (!CanAllocate())
+		throw Exception::MatrixManagerException("Not enough space on the matrix stack! Go slap a programmer.");
+
+	memcpy_s(m_StackPointer, 64, Matrix, 64);
 	m_StackPointer += 16;
 }
 
 void CMatrixManager::Push(CCamera &Camera)
 {
-	assert(CanAllocate());
+	if (!CanAllocate())
+		throw Exception::MatrixManagerException("Not enough space on the matrix stack! Go slap a programmer.");
 
 	CMatrix44 CameraMatrix;
 	Camera.GetCameraMatrix(CameraMatrix);
@@ -43,7 +76,8 @@ void CMatrixManager::Push(CCamera &Camera)
 
 void CMatrixManager::Push(void)
 {
-	assert(CanAllocate());
+	if (!CanAllocate())
+		throw Exception::MatrixManagerException("Not enough space on the matrix stack! Go slap a programmer.");
 
 	CMatrix44 *OldMatrix = (CMatrix44*)(m_StackPointer - 16);
 	CMatrix44 *NewMatrix = (CMatrix44*)(m_StackPointer);
@@ -53,7 +87,9 @@ void CMatrixManager::Push(void)
 
 void CMatrixManager::Pop(void)
 {
-	assert(m_StackPointer - 16 >= m_StackBottom);
+	if (m_StackPointer - 16 < m_StackBottom)
+		throw Exception::MatrixManagerException("You are trying to pop something that isn't there. Go slap a programmer.");
+
 	m_StackPointer -= 16;
 }
 
@@ -66,6 +102,12 @@ void CMatrixManager::Multiply(CMatrix44 &Matrix)
 {
 	CMatrix44 *OldMatrix = (CMatrix44 *)((float*)m_StackPointer - 16);
 	OldMatrix->Multiply(Matrix);
+}
+
+void CMatrixManager::Multiply(const GLfloat *Matrix)
+{
+	CMatrix44 *OldMatrix = (CMatrix44 *)((float*)m_StackPointer - 16);
+	OldMatrix->Multiply(*(CMatrix44*)Matrix);
 }
 
 void CMatrixManager::Translate(GLfloat X, GLfloat Y, GLfloat Z)

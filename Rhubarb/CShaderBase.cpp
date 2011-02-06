@@ -1,8 +1,29 @@
+/***********************************************************************
+**
+** This file is part of Rhubarb.
+** 
+** Rhubarb is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+** 
+** Rhubarb is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with Rhubarb.  If not, see <http://www.gnu.org/licenses/>.
+**
+************************************************************************/
+
 #include <stdio.h>
-#include <assert.h>
 
 #include "CShaderBase.h"
 using namespace rb;
+
+#include <iostream>
+#include <fstream>
 
 CShaderBase::CShaderBase(void)
 {
@@ -10,23 +31,30 @@ CShaderBase::CShaderBase(void)
 
 void CShaderBase::ReadSource(const char *VertexFile, const char *FragmentFile)
 {
-	FILE *fp;
+	std::ifstream File;
+	File.open(VertexFile, std::ios::in | std::ios::binary);
+	File.seekg(0, std::ios::end);
+	int Size = (int)File.tellg();
+	File.seekg(0, std::ios::beg);
 
-	fopen_s(&fp, VertexFile, "r");
-	fseek(fp, 0, SEEK_END);
-	size_t Size = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-	assert(Size < RB_SHADER_MAX_SIZE);
-	fread_s(m_VertexSource, RB_SHADER_MAX_SIZE, Size, 1, fp);
-	fclose(fp);
+	if (Size > RB_SHADER_MAX_SIZE)
+		throw Exception::ShaderCompileException("Vertex shader source too large!");
 
-	fopen_s(&fp, FragmentFile, "r");
-	fseek(fp, 0, SEEK_END);
-	Size = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-	assert(Size < RB_SHADER_MAX_SIZE);
-	fread_s(m_FragmentSource, RB_SHADER_MAX_SIZE, Size, 1, fp);
-	fclose(fp);
+	File.read(m_VertexSource, Size);
+	File.close();
+	m_VertexSource[Size] = 0;
+
+	File.open(FragmentFile, std::ios::in | std::ios::binary);
+	File.seekg(0, std::ios::end);
+	Size = (int)File.tellg();
+	File.seekg(0, std::ios::beg);
+
+	if (Size > RB_SHADER_MAX_SIZE)
+		throw Exception::ShaderCompileException("Fragment shader source too large!");
+
+	File.read(m_FragmentSource, Size);
+	File.close();
+	m_FragmentSource[Size] = 0;
 }
 
 void CShaderBase::LoadShader(const char *Source, GLuint Shader)
@@ -45,11 +73,24 @@ void CShaderBase::CompileShader(GLuint Shader)
 	GLint Test;
 
 	glGetShaderiv(Shader, GL_COMPILE_STATUS, &Test);
-    assert(Test != GL_FALSE);
+
+	if (Test == GL_FALSE)
+	{
+		GLint Length;
+		glGetShaderiv(Shader, GL_INFO_LOG_LENGTH, &Length);
+		
+		GLchar *Error = new GLchar[Length];
+		glGetShaderInfoLog(Shader, Length, NULL, Error);
+
+		throw Exception::ShaderCompileException("Could not compile shader source! " + std::string(Error));
+
+		delete [] Error;
+	}
 }
 
 void CShaderBase::Initialize(void)
 {
+	std::cout << "[i] Compiling shader..." << std::endl;
 	GLuint VertexShader, FragmentShader;
 
 	VertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -71,10 +112,14 @@ void CShaderBase::Initialize(void)
 
 	GLint Test;
 	glGetProgramiv(m_Program, GL_COMPILE_STATUS, &Test);
-    assert(Test != GL_FALSE);
+
+    if (Test == GL_FALSE)
+		throw Exception::ShaderCompileException("Could not link shader program!");
 
 	glDeleteShader(VertexShader);
 	glDeleteShader(FragmentShader);
+
+	std::cout << "[i] Succesfully compiled shader." << std::endl;
 }
 
 CShaderBase::~CShaderBase(void)

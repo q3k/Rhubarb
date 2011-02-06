@@ -1,13 +1,48 @@
+/***********************************************************************
+**
+** This file is part of Rhubarb.
+** 
+** Rhubarb is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+** 
+** Rhubarb is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with Rhubarb.  If not, see <http://www.gnu.org/licenses/>.
+**
+************************************************************************/
+
 #pragma once
 
 #include <GL/glew.h>
 #include <GL/GL.h>
+
+#include <exception>
+#include <string>
 
 #include "CMatrix44.h"
 #include "CCamera.h"
 
 namespace rb
 {
+	namespace Exception
+	{
+		class MatrixManagerException : public std::exception
+		{
+			public:
+				MatrixManagerException(const std::string Error) { m_Error = std::string(Error); }
+				~MatrixManagerException(void) throw() {};
+				virtual const char* what() const throw() { return m_Error.c_str(); }
+			private:
+				std::string m_Error;
+		};
+	};
+
 	class CMatrixManager
 	{
 		public:
@@ -23,6 +58,7 @@ namespace rb
 			void PushIdentity();
 			//Push an existing matrix
 			void Push(CMatrix44 &Matrix);
+			void Push(const GLfloat *Matrix);
 			//Push a Camera view
 			void Push(CCamera &Camera);
 
@@ -31,6 +67,7 @@ namespace rb
 			void Rotate(GLfloat Angle, GLfloat X, GLfloat Y, GLfloat Z);
 			void Scale(GLfloat X, GLfloat Y, GLfloat Z);
 			void Multiply(CMatrix44 &Matrix);
+			void Multiply(const GLfloat *Matrix);
 
 			////// Projection Matrix methods
 			//Set projection matrix

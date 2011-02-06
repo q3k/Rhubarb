@@ -1,9 +1,29 @@
+/***********************************************************************
+**
+** This file is part of Rhubarb.
+** 
+** Rhubarb is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 3 of the License, or
+** (at your option) any later version.
+** 
+** Rhubarb is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with Rhubarb.  If not, see <http://www.gnu.org/licenses/>.
+**
+************************************************************************/
+
 #include "CEntity.h"
 using namespace rb;
 
 CEntity::CEntity(void)
 {
 	ResetRotation();
+	m_TempMatrix = new GLfloat[16];
 }
 
 void CEntity::ResetRotation(void)
@@ -20,7 +40,7 @@ void CEntity::ResetRotation(void)
 
 	m_Forward.m_Data[0] = 0.0f;
 	m_Forward.m_Data[1] = 0.0f;
-	m_Forward.m_Data[2] = -1.0f;
+	m_Forward.m_Data[2] = 1.0f;
 	m_Forward.m_Data[3] = 1.0f;
 }
 
@@ -116,6 +136,12 @@ void CEntity::GetMatrix(CMatrix44 &Matrix)
 	Matrix.m_Data[15] = 1.0f;
 }
 
+const GLfloat *CEntity::GetMatrix(void)
+{
+	GetMatrix(m_TempMatrix);
+	return m_TempMatrix;
+}
+
 void CEntity::GetMatrix(GLfloat *Matrix)
 {
 	CMatrix44 Temporary;
@@ -165,4 +191,5 @@ void CEntity::RotateLocal(GLfloat Angle, GLfloat X, GLfloat Y, GLfloat Z)
 
 CEntity::~CEntity(void)
 {
+	delete [] m_TempMatrix;
 }

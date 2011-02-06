@@ -74,29 +74,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CDLShader.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CFlatShader.h" />
     <ClInclude Include="CIdentityShader.h" />
     <ClInclude Include="CMatrix44.h" />
     <ClInclude Include="CMatrixManager.h" />
     <ClInclude Include="CMesh.h" />
+    <ClInclude Include="CModel.h" />
     <ClInclude Include="CObjReader.h" />
     <ClInclude Include="CPhongShader.h" />
     <ClInclude Include="CShaderBase.h" />
+    <ClInclude Include="CTextureManager.h" />
     <ClInclude Include="CTriangleMesh.h" />
     <ClInclude Include="CVector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CDLShader.cpp" />
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CFlatShader.cpp" />
     <ClCompile Include="CIdentityShader.cpp" />
     <ClCompile Include="CMatrix44.cpp" />
     <ClCompile Include="CMatrixManager.cpp" />
     <ClCompile Include="CMesh.cpp" />
+    <ClCompile Include="CModel.cpp" />
     <ClCompile Include="CObjReader.cpp" />
     <ClCompile Include="CPhongShader.cpp" />
     <ClCompile Include="CShaderBase.cpp" />
+    <ClCompile Include="CTextureManager.cpp" />
     <ClCompile Include="CTriangleMesh.cpp" />
     <ClCompile Include="CVector4.cpp" />
     <ClCompile Include="main.cpp" />
