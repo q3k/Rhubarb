@@ -26,11 +26,15 @@
 #include "Rhubarb.h"
 
 #define DegToRad(x)	((x)*0.017453292519943296f)
+#define CUBE_NUM 1
 
 rb::CMatrixManager g_MatrixManager;
 rb::CCamera g_Camera;
 rb::CTextureManager g_TextureManager;
-rb::CModel g_Cube;
+rb::CModel g_Cubes[CUBE_NUM];
+rb::CTimer g_Timer;
+
+unsigned int g_NumFrames = 0;
 
 void fnChangeSize(int Width, int Height)
 {
@@ -42,12 +46,26 @@ void fnRenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
-	g_Cube.RotateWorld(DegToRad(0.1f), 0.0f, 1.0f, 0.0f);
-	g_Cube.RotateWorld(DegToRad(0.05f), 1.0f, 0.0f, 0.0f);
-	g_Cube.Draw();
+	for (int i = 0; i < CUBE_NUM; i++)
+	{
+		g_Cubes[i].RotateWorld(DegToRad(0.1f), 0.0f, 1.0f, 0.0f);
+		g_Cubes[i].RotateWorld(DegToRad(0.05f), 1.0f, 0.0f, 0.0f);
+		g_Cubes[i].Draw();
+	}
 
 	glutSwapBuffers();
 	glutPostRedisplay();
+
+	if (g_Timer.GetElapsedSeconds() > 5.0f)
+	{
+		float Seconds = g_Timer.GetElapsedSeconds();
+		float FPS = g_NumFrames / Seconds;
+		std::cout << "[i] FPS: " << FPS << std::endl;
+
+		g_Timer.Start();
+		g_NumFrames = 0;
+	}
+	g_NumFrames++;
 }
 
 int main(int argc, char **argv)
@@ -71,12 +89,22 @@ int main(int argc, char **argv)
 	glEnable(GL_DEPTH_TEST);
 
 	//Begin "proper" code.
-	g_Cube.Bind(&g_TextureManager, &g_MatrixManager);
-	g_Cube.Load("Data/cube.model");
+	for (int i = 0; i < CUBE_NUM; i++)
+	{
+		g_Cubes[i].Bind(&g_TextureManager, &g_MatrixManager);
+		g_Cubes[i].Load("Data/cube.model");
+		g_Cubes[i].SetPosition(0.0f, 0.0f, -20.0f);
+		//g_Cubes[i].SetPosition(i * 3.0f - (CUBE_NUM * 1.5f), 0.0f, -10.0f);
+	}
 
-	g_Camera.SetPosition(0.0f, 4.0f, 6.0f);
-	g_Camera.LookAt(rb::CVector4(0.0f, 0.0f, 0.0f));
+	
+	//g_Camera.RotateWorld(DegToRad(180), 0.0f, 1.0f, 0.0f);
+	g_Camera.SetPosition(0.0f, 8.0f, 5.0f);
+	g_Camera.LookAt(rb::CVector4(0.0f, 0.0f, -20.0f));
 
 	g_MatrixManager.Push(g_Camera);
+
+	g_Timer.Start();
+	g_NumFrames = 0;
 	glutMainLoop();
 }

@@ -21,6 +21,7 @@
 using namespace rb;
 
 #include <fstream>
+#include <iostream>
 
 #include "Helpers/CObjReader.h"
 
@@ -83,6 +84,8 @@ void CModel::Load(std::string Filename)
 		throw Exception::ModelException("Mesh file does not contain all \
 										required keywords!");
 
+	std::cout << "[i] Loading model " << m_Name << "..." << std::endl;
+
 	try
 	{
 		m_Shader = new CDLShader(m_VertexShaderName, m_FragmentShaderName);
@@ -115,6 +118,8 @@ void CModel::Load(std::string Filename)
 			throw Exception::ModelException("Texture error! " + std::string(e.what()));
 		}
 	}
+
+	std::cout << "[i] Finished loading model " << m_Name << "..." << std::endl;
 
 	m_Loaded = true;
 }

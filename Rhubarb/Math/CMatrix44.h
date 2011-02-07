@@ -41,7 +41,6 @@ namespace rb
 			void Multiply(CMatrix44 &Matrix, CMatrix44 &Target);
 			void Multiply(CVector4 &Vector, CVector4 &Target);
 
-			void Row(int i, CVector4 &Target);
 			void Column(int i, CVector4 &Target);
 
 			void SetColumn(int i, CVector4 &Vector);

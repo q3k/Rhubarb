@@ -28,6 +28,7 @@
 #include "Helpers/CMatrixManager.h"
 #include "Helpers/CObjReader.h"
 #include "Helpers/CTextureManager.h"
+#include "Helpers/CTimer.h"
 
 #include "Shaders/CDLShader.h"
 #include "Shaders/CFlatShader.h"

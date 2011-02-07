@@ -100,6 +100,10 @@ GLfloat CVector4::LengthSquared(void)
 void CVector4::Normalize(void)
 {
 	GLfloat _Length = Length();
+
+	if (_Length == 0.0f)
+		return;
+
 	m_Data[0] /= _Length;
 	m_Data[1] /= _Length;
 	m_Data[2] /= _Length;
@@ -108,6 +112,11 @@ void CVector4::Normalize(void)
 void CVector4::Normalize(CVector4 &Target)
 {
 	GLfloat _Length = Length();
+
+	//Ugly fix.
+	if (_Length == 0.0f)
+		_Length = 1.0f;
+
 	Target.m_Data[0] = m_Data[0] / _Length;
 	Target.m_Data[1] = m_Data[1] / _Length;
 	Target.m_Data[2] = m_Data[2] / _Length;

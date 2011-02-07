@@ -29,6 +29,10 @@ void CCamera::LookAt(CVector4 &Target)
 {
 	CVector4 Forward;
 	Target.Subtract(m_Position, Forward);
+
+	if (Forward.Length() == 0.0f)
+		return;
+
 	Forward.Normalize();
 	Forward.m_Data[3] = 1.0f;
 
