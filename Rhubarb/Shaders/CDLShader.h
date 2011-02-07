@@ -34,7 +34,20 @@ namespace rb
 
 			virtual void InitializeAttributes(void);
 
-			virtual void Use(GLfloat *MVMatrix, GLfloat *PMatrix, CVector4 &Light);
+			virtual void Use(GLfloat *MVMatrix, GLfloat *MVPMatrix, CVector4 &Light, CVector4 &Ambient, CVector4 &Diffuse, GLfloat Shininess);
+		private:
+			GLint m_LocationAmbient;
+			GLint m_LocationDiffuse;
+			GLint m_LocationShininess;
+
+			GLint m_LocationMVMatrix;
+			GLint m_LocationMVPMatrix;
+			GLint m_LocationNormalMatrix;
+			GLint m_LocationLight;
+
+			GLint m_LocationTexture;
+
+			bool m_FoundLocations;
 	};
 }
 

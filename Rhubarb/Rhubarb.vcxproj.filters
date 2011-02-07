@@ -78,10 +78,10 @@
     <ClCompile Include="Helpers\CTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CShaderManager.cpp">
+    <ClCompile Include="Core\CEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\CEngine.cpp">
+    <ClCompile Include="Helpers\CShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,10 +137,10 @@
     <ClInclude Include="Helpers\CTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CShaderManager.h">
+    <ClInclude Include="Core\CEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\CEngine.h">
+    <ClInclude Include="Helpers\CShaderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

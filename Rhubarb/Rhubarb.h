@@ -19,6 +19,8 @@
 
 //Just include EVERYTHING
 
+#include "Core/CEngine.h"
+
 #include "Core/CCamera.h"
 #include "Core/CEntity.h"
 #include "Core/CMesh.h"

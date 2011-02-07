@@ -20,8 +20,11 @@
 #include "Helpers/CTextureManager.h"
 using namespace rb;
 
+#include "Core/CEngine.h"
+
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 CTextureManager::CTextureManager(void)
 {
@@ -54,7 +57,9 @@ TTexture CTextureManager::GetTexture(std::string Name)
 	if (TextureBuffer == 0)
 		throw Exception::TextureManagerException("Error reading TGA file!");
 
-	std::cout << "[i] Succesfully read texture " << Name << ", " << Width << " by " << Height << " pixels." << std::endl;
+	std::stringstream Message;
+	Message << "Succesfully read texture " << Name << ", " << Width << " by " << Height << " pixels.\n";
+	CEngine::Get()->Log(Message.str());
 
 	TTexture Texture;
 	glGenTextures(1, &Texture);
@@ -62,8 +67,8 @@ TTexture CTextureManager::GetTexture(std::string Name)
 	glBindTexture(GL_TEXTURE_2D, Texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	GLfloat Largest;
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &Largest);
@@ -71,7 +76,7 @@ TTexture CTextureManager::GetTexture(std::string Name)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, Components, Width, Height, 0, Format, GL_UNSIGNED_BYTE, TextureBuffer);
 	
-	std::cout << "[i] Generating mipmaps..." << std::endl;
+	CEngine::Get()->Log("Generating mipmaps...\n");
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	delete [] TextureBuffer;

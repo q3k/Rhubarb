@@ -75,7 +75,7 @@
   <ItemGroup>
     <ClInclude Include="Core\CEngine.h" />
     <ClInclude Include="Core\CCamera.h" />
-    <ClInclude Include="CShaderManager.h" />
+    <ClInclude Include="Helpers\CShaderManager.h" />
     <ClInclude Include="Helpers\CTimer.h" />
     <ClInclude Include="Rhubarb.h" />
     <ClInclude Include="Shaders\CDLShader.h" />
@@ -96,7 +96,7 @@
   <ItemGroup>
     <ClCompile Include="Core\CEngine.cpp" />
     <ClCompile Include="Core\CCamera.cpp" />
-    <ClCompile Include="CShaderManager.cpp" />
+    <ClCompile Include="Helpers\CShaderManager.cpp" />
     <ClCompile Include="Helpers\CTimer.cpp" />
     <ClCompile Include="Shaders\CDLShader.cpp" />
     <ClCompile Include="Core\CEntity.cpp" />

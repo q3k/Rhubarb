@@ -28,6 +28,8 @@
 #include "Helpers/CTextureManager.h"
 #include "Helpers/CMatrixManager.h"
 
+#include "Math/CVector4.h"
+
 namespace rb
 {
 	namespace Exception
@@ -48,9 +50,10 @@ namespace rb
 			CModel(void);
 			~CModel(void);
 
-			void Bind(CTextureManager *TextureManager, CMatrixManager *MatrixManager);
 			void Load(std::string Filename);
 			void Draw(void);
+
+			void SetDiffuseColor(float R, float G, float B, float A);
 		private:
 			CDLShader *m_Shader;
 			CTriangleMesh *m_Mesh;
@@ -67,5 +70,9 @@ namespace rb
 			std::string m_FragmentShaderName;
 			std::string m_MeshName;
 			std::string m_TextureName;
+
+			CVector4 m_Ambient;
+			CVector4 m_Diffuse;
+			float m_Shininess;
 	};
 };

@@ -27,6 +27,11 @@ CMatrix44::CMatrix44(void)
 	Identity();
 }
 
+CMatrix44::CMatrix44(GLfloat *Matrix)
+{
+	memcpy_s(m_Data, 16, Matrix, 16);
+}
+
 void CMatrix44::Rotation(float Angle, float X, float Y, float Z)
 {
 	float Length, s, c;

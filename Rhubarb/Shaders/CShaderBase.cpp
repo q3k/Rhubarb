@@ -22,7 +22,9 @@
 #include "Shaders/CShaderBase.h"
 using namespace rb;
 
-#include <iostream>
+#include "Core/CEngine.h"
+
+#include <sstream>
 #include <fstream>
 
 CShaderBase::CShaderBase(void)
@@ -90,7 +92,10 @@ void CShaderBase::CompileShader(GLuint Shader)
 
 void CShaderBase::Initialize(void)
 {
-	std::cout << "[i] Compiling shader..." << std::endl;
+	std::stringstream Message;
+	Message << "Compiling shader..." << std::endl;
+	CEngine::Get()->Log(Message.str());
+
 	GLuint VertexShader, FragmentShader;
 
 	VertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -119,7 +124,9 @@ void CShaderBase::Initialize(void)
 	glDeleteShader(VertexShader);
 	glDeleteShader(FragmentShader);
 
-	std::cout << "[i] Succesfully compiled shader." << std::endl;
+	std::stringstream Message2;
+	Message2 << "Succesfully compiled shader." << std::endl;
+	CEngine::Get()->Log(Message2.str());
 }
 
 CShaderBase::~CShaderBase(void)

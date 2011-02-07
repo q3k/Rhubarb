@@ -24,7 +24,9 @@ using namespace rb;
 #include <iostream>
 #include <cstring>
 #include <algorithm>
+#include <sstream>
 
+#include "Core/CEngine.h"
 #include "Math/CVector4.h"
 
 CObjReader::CObjReader(std::string Filename)
@@ -115,7 +117,7 @@ void CObjReader::Read(CTriangleMesh &Target)
 			m_Normals.push_back(Z);
 			std::getline(File, Line);
 		}
-		else if (Keyword == "t")
+		else if (Keyword == "t" || Keyword == "vt")
 		{
 			GLfloat S, T;
 			File >> S >> T;
@@ -173,7 +175,10 @@ void CObjReader::Read(CTriangleMesh &Target)
 	}
 	Target.End();
 
-	std::cout << "[i] Succesfully read " << m_Vertices.size() / 3 << " vertices and " << IndexInfoList.size() / (SlashMode ? 9 : 3) << " faces." << std::endl;
+	std::stringstream Message;
+	Message << "Succesfully read " << m_Vertices.size() / 3 << " vertices and " << IndexInfoList.size() / (SlashMode ? 9 : 3) << " faces.\n";
+
+	CEngine::Get()->Log(Message.str());
 }
 
 CObjReader::~CObjReader(void)

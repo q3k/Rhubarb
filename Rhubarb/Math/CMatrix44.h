@@ -29,6 +29,7 @@ namespace rb
 	{
 		public:
 			CMatrix44(void);
+			CMatrix44(GLfloat *Matrix);
 			~CMatrix44(void);
 
 			//This overwrites the existing data

@@ -20,6 +20,8 @@
 #include "Shaders/CDLShader.h"
 using namespace rb;
 
+#include "Math/CMatrix44.h"
+
 CDLShader::CDLShader(std::string VertexShaderFile, std::string FragmentShaderFile)
 {
 	ReadSource(VertexShaderFile.c_str(), FragmentShaderFile.c_str());
@@ -31,23 +33,50 @@ void CDLShader::InitializeAttributes(void)
 	glBindAttribLocation(m_Program, 0, "vVertex");
 	glBindAttribLocation(m_Program, 1, "vNormal");
 	glBindAttribLocation(m_Program, 2, "vTexture");
+
+	m_FoundLocations = false;
 }
 
-void CDLShader::Use(GLfloat *MVMatrix, GLfloat *PMatrix, CVector4 &Light)
+void CDLShader::Use(GLfloat *MVMatrix, GLfloat *MVPMatrix, CVector4 &Light, CVector4 &Ambient, CVector4 &Diffuse, GLfloat Shininess)
 {
 	glUseProgram(m_Program);
 
-	GLint MVMatrixLocation = glGetUniformLocation(m_Program, "mvMatrix");
-	glUniformMatrix4fv(MVMatrixLocation, 1, GL_FALSE, MVMatrix);
+	//precalculate normal matrix - not a good idea?
+	GLfloat NormalMatrix[9];
+	CVector4 *X = (CVector4*) MVMatrix;
+	CVector4 *Y = (CVector4*) (MVMatrix + 4);
+	CVector4 *Z = (CVector4*) (MVMatrix + 8);
 
-	GLint PMatrixLocation = glGetUniformLocation(m_Program, "pMatrix");
-	glUniformMatrix4fv(PMatrixLocation, 1, GL_FALSE, PMatrix);
+	X->Normalize(*(CVector4*)NormalMatrix);
+	Y->Normalize(*(CVector4*)(NormalMatrix + 3));
+	Z->Normalize(*(CVector4*)(NormalMatrix + 6));
 
-	GLint LightLocation = glGetUniformLocation(m_Program, "vLightPos");
-	glUniform3fv(LightLocation, 1, Light.m_Data);
+	if (!m_FoundLocations)
+	{
+		m_LocationAmbient = glGetUniformLocation(m_Program, "AmbientColor");
+		m_LocationDiffuse = glGetUniformLocation(m_Program, "DiffuseColor");
+		m_LocationShininess = glGetUniformLocation(m_Program, "Shininess");
 
-	GLint TextureLocation = glGetUniformLocation(m_Program, "tTexture");
-	glUniform1i(TextureLocation, 0);
+		m_LocationMVMatrix = glGetUniformLocation(m_Program, "mvMatrix");
+		m_LocationMVPMatrix = glGetUniformLocation(m_Program, "mvpMatrix");
+		m_LocationNormalMatrix = glGetUniformLocation(m_Program, "normalMatrix");
+		m_LocationLight = glGetUniformLocation(m_Program, "LightPosition");
+
+		m_LocationTexture = glGetUniformLocation(m_Program, "Texture");
+
+		m_FoundLocations = true;
+	}
+
+	glUniform4fv(m_LocationAmbient, 1, Ambient.m_Data);
+	glUniform4fv(m_LocationDiffuse, 1, Diffuse.m_Data);
+	glUniform1f(m_LocationShininess, Shininess);
+
+	glUniformMatrix4fv(m_LocationMVMatrix, 1, GL_FALSE, MVMatrix);
+	glUniformMatrix4fv(m_LocationMVPMatrix, 1, GL_FALSE, MVPMatrix);
+	glUniformMatrix3fv(m_LocationNormalMatrix, 1, GL_FALSE, NormalMatrix);
+	glUniform3fv(m_LocationLight, 1, Light.m_Data);
+	
+	glUniform1i(m_LocationTexture, 0);
 }
 
 CDLShader::~CDLShader(void)

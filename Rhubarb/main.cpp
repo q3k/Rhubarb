@@ -18,93 +18,43 @@
 ************************************************************************/
 
 #include <iostream>
-
-#define GLEW_STATIC
-#include <GL/glew.h>
-#include <GL/glut.h>
+#include <cmath>
 
 #include "Rhubarb.h"
 
-#define DegToRad(x)	((x)*0.017453292519943296f)
-#define CUBE_NUM 1
+rb::CEngine *g_Engine = rb::CEngine::Get();
+rb::CModel Model;
+rb::CModel Text;
+rb::CCamera Camera;
 
-rb::CMatrixManager g_MatrixManager;
-rb::CCamera g_Camera;
-rb::CTextureManager g_TextureManager;
-rb::CModel g_Cubes[CUBE_NUM];
-rb::CTimer g_Timer;
-
-unsigned int g_NumFrames = 0;
-
-void fnChangeSize(int Width, int Height)
+bool fnRender(float DeltaTime)
 {
-	glViewport(0, 0, Width, Height);
-	g_MatrixManager.SetPerspective(DegToRad(35.0f), float(Width)/float(Height), 1.0f, 1000.0f);
-}
+	static float Color = 0.0f;
+	Color += DeltaTime;
 
-void fnRenderScene(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
-	for (int i = 0; i < CUBE_NUM; i++)
-	{
-		g_Cubes[i].RotateWorld(DegToRad(0.1f), 0.0f, 1.0f, 0.0f);
-		g_Cubes[i].RotateWorld(DegToRad(0.05f), 1.0f, 0.0f, 0.0f);
-		g_Cubes[i].Draw();
-	}
+	Model.RotateWorld(rbDegToRad(DeltaTime * 200), 0.0f, 1.0f, 0.0f);
+	Text.RotateWorld(-rbDegToRad(DeltaTime * 200), 0.0f, 1.0f, 0.0f);
 
-	glutSwapBuffers();
-	glutPostRedisplay();
+	Text.SetDiffuseColor((sinf(Color) / 2.0f) + 0.5f, -((sinf(Color) / 2.0f) + 0.5f), (cosf(Color) / 2.0f) + 0.5f, 1.0f);
 
-	if (g_Timer.GetElapsedSeconds() > 5.0f)
-	{
-		float Seconds = g_Timer.GetElapsedSeconds();
-		float FPS = g_NumFrames / Seconds;
-		std::cout << "[i] FPS: " << FPS << std::endl;
+	Model.Draw();
+	Text.Draw();
 
-		g_Timer.Start();
-		g_NumFrames = 0;
-	}
-	g_NumFrames++;
+	return true;
 }
 
 int main(int argc, char **argv)
 {
-	//Some day all of this will go in its own class...
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
-	glutInitWindowSize(800, 600);
-	glutCreateWindow("Rhubarb");
-	glutReshapeFunc(fnChangeSize);
-	glutDisplayFunc(fnRenderScene);
+	g_Engine->Initialize(800, 600, "Rhubarb Demo");
 
-	GLenum Error = glewInit();
-	if (Error != GLEW_OK)
-	{
-		std::cerr << "GLEW Error: " << glewGetErrorString(Error) << std::endl;
-		return 1;
-	}
+	Model.Load("Data/teapot.model");
+	Text.Load("Data/text.model");
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glEnable(GL_DEPTH_TEST);
+	Camera.SetPosition(0.0f, 20.0f, 45.0f);
+	Camera.LookAt(rb::CVector4(0.0f, 5.0f, 0.0f));
 
-	//Begin "proper" code.
-	for (int i = 0; i < CUBE_NUM; i++)
-	{
-		g_Cubes[i].Bind(&g_TextureManager, &g_MatrixManager);
-		g_Cubes[i].Load("Data/cube.model");
-		g_Cubes[i].SetPosition(0.0f, 0.0f, -20.0f);
-		//g_Cubes[i].SetPosition(i * 3.0f - (CUBE_NUM * 1.5f), 0.0f, -10.0f);
-	}
-
-	
-	//g_Camera.RotateWorld(DegToRad(180), 0.0f, 1.0f, 0.0f);
-	g_Camera.SetPosition(0.0f, 8.0f, 5.0f);
-	g_Camera.LookAt(rb::CVector4(0.0f, 0.0f, -20.0f));
-
-	g_MatrixManager.Push(g_Camera);
-
-	g_Timer.Start();
-	g_NumFrames = 0;
-	glutMainLoop();
+	g_Engine->SetClearColor(0.1f, 0.1f, 0.1f);
+	g_Engine->SetRenderFunction(fnRender);
+	g_Engine->SetCamera(&Camera);
+	g_Engine->Start();
 }

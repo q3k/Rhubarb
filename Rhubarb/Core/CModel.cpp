@@ -21,9 +21,10 @@
 using namespace rb;
 
 #include <fstream>
-#include <iostream>
+#include <sstream>
 
 #include "Helpers/CObjReader.h"
+#include "Core/CEngine.h"
 
 CModel::CModel(void)
 {
@@ -34,16 +35,14 @@ CModel::CModel(void)
 	m_Shader = 0;
 
 	CEntity::CEntity();
-}
 
-void CModel::Bind(CTextureManager *TextureManager, CMatrixManager *MatrixManager)
-{
-	m_TextureManager = TextureManager;
-	m_MatrixManager = MatrixManager;
+	m_Shininess = 128.0f;
 }
 
 void CModel::Load(std::string Filename)
 {
+	CEngine::Get()->GetManagers(&m_MatrixManager, 0, &m_TextureManager);
+
 	std::ifstream File;
 	File.open(Filename, std::ios::in);
 
@@ -69,6 +68,12 @@ void CModel::Load(std::string Filename)
 			File >> m_MeshName;
 		else if (Keyword == "texture")
 			File >> m_TextureName;
+		else if (Keyword == "ambient")
+			File >> m_Ambient.m_Data[0] >> m_Ambient.m_Data[1] >> m_Ambient.m_Data[2] >> m_Ambient.m_Data[3];
+		else if (Keyword == "diffuse")
+			File >> m_Diffuse.m_Data[0] >> m_Diffuse.m_Data[1] >> m_Diffuse.m_Data[2] >> m_Diffuse.m_Data[3];
+		else if (Keyword == "shininess")
+			File >> m_Shininess;
 		else if (Keyword == "#" || Keyword == "")
 			{}
 		else
@@ -84,7 +89,9 @@ void CModel::Load(std::string Filename)
 		throw Exception::ModelException("Mesh file does not contain all \
 										required keywords!");
 
-	std::cout << "[i] Loading model " << m_Name << "..." << std::endl;
+	std::stringstream Message;
+	Message << "Loading model " << m_Name << "...\n";
+	CEngine::Get()->Log(Message.str());
 
 	try
 	{
@@ -119,7 +126,9 @@ void CModel::Load(std::string Filename)
 		}
 	}
 
-	std::cout << "[i] Finished loading model " << m_Name << "..." << std::endl;
+	std::stringstream Message2;
+	Message2 << "Finished loading model " << m_Name << ".\n";
+	CEngine::Get()->Log(Message2.str());
 
 	m_Loaded = true;
 }
@@ -131,7 +140,7 @@ void CModel::Draw(void)
 		m_MatrixManager->Push();
 		m_MatrixManager->Multiply(GetMatrix());
 
-		m_Shader->Use(m_MatrixManager->GetMV(), m_MatrixManager->GetP(), CVector4(0.0f, 0.0f, 0.0f));
+		m_Shader->Use(m_MatrixManager->GetMV(), m_MatrixManager->GetMVP(), CVector4(100.0f, 50.0f, 70.0f), m_Ambient, m_Diffuse, m_Shininess);
 
 		if (m_HasTexture)
 			glBindTexture(GL_TEXTURE_2D, m_Texture);
@@ -140,6 +149,14 @@ void CModel::Draw(void)
 
 		m_MatrixManager->Pop();
 	}
+}
+
+void CModel::SetDiffuseColor(float R, float G, float B, float A)
+{
+	m_Diffuse.m_Data[0] = R;
+	m_Diffuse.m_Data[1] = G;
+	m_Diffuse.m_Data[2] = B;
+	m_Diffuse.m_Data[3] = A;
 }
 
 CModel::~CModel(void)
