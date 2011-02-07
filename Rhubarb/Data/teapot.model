@@ -1,0 +1,25 @@
+# This is how comments look like (notice the space at the beggining!).
+
+# Name of model
+name TexturedTeapot
+
+# Name of vertex shader
+vertex Data/texturedphong.v.glsl
+
+# Name of fragment shader
+fragment Data/texturedphong.f.glsl
+
+# Name of mesh
+mesh Data/teapot.obj
+
+# Ambient Color
+ambient 0.1 0.1 0.1 1.0
+
+# Diffuse Color
+diffuse 1.0 0.0 0.0 1.0
+
+# Shininess
+shininess 128
+
+# Texture
+texture Data/teapot.tga
