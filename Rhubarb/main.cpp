@@ -35,7 +35,7 @@ bool fnRender(float DeltaTime)
 	Model.RotateWorld(rbDegToRad(DeltaTime * 200), 0.0f, 1.0f, 0.0f);
 	Text.RotateWorld(-rbDegToRad(DeltaTime * 200), 0.0f, 1.0f, 0.0f);
 
-	Text.SetDiffuseColor((sinf(Color) / 2.0f) + 0.5f, -((sinf(Color) / 2.0f) + 0.5f), (cosf(Color) / 2.0f) + 0.5f, 1.0f);
+	Text.SetDiffuseColor((sinf(Color) / 2.0f) + 0.5f, (sinf(Color + 2.094f) / 2.0f) + 0.5f, (sinf(Color + 4.188f) / 2.0f) + 0.5f, 1.0f);
 
 	Model.Draw();
 	Text.Draw();
