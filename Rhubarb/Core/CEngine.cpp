@@ -198,7 +198,7 @@ void CEngine::Fatal(std::string Message)
 
 void CEngine::Start(void)
 {
-	Log("Entering render loop...");
+	Log("Entering render loop...\n");
 
 	glutMainLoop();
 }
