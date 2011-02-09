@@ -53,71 +53,11 @@ void CTriangleMesh::Begin(GLint NumberVertices)
 	m_TextureVertices = new GLfloat[m_Maximum * 2];
 }
 
-bool CTriangleMesh::CompareVectors(GLfloat *VertexA, GLfloat *VertexB)
-{
-	const GLfloat Error = 0.0001f;
-	if (abs(VertexA[0]  - VertexB[0]) <= Error &&
-		abs(VertexA[1]  - VertexB[1]) <= Error &&
-		abs(VertexA[2]  - VertexB[2]) <= Error)
-		return true;
-	else
-		return false;
-}
 
-bool CTriangleMesh::CompareTextureVertices(GLfloat *VertexA, GLfloat *VertexB)
-{
-	const GLfloat Error = 0.0001f;
-	if (abs(VertexA[0]  - VertexB[0]) <= Error &&
-		abs(VertexA[1]  - VertexB[1]) <= Error)
-		return true;
-	else
-		return false;
-}
 
-void CTriangleMesh::AddIndex(CVector4 &Vertex, CVector4 &Normal, GLfloat NewTextureVertex[2])
-{
-	GLfloat *NewVertex = Vertex.m_Data;
 
-	CVector4 NormalizedNormal;
-	Normal.Normalize(NormalizedNormal);
-	GLfloat *NewNormal = NormalizedNormal.m_Data;
 
-	//each vertex from current vertex list.
-	GLuint j = 0;
-	for (j = 0; j < m_VertexCount / 3; j++)
-	{
-		GLfloat *OldVertex = m_Vertices + j * 3;
-		GLfloat *OldNormal = m_Normals + j * 3;
-		GLfloat *OldTextureVertex = m_TextureVertices + j * 2;
 
-		if (CompareVectors(NewVertex, OldVertex) &&
-			CompareVectors(NewNormal, OldNormal) &&
-			CompareTextureVertices(NewTextureVertex, OldTextureVertex))
-		{
-			m_Indices[m_IndexCount] = j;
-			m_IndexCount++;
-			break;
-		}
-	}
-
-	if (j == m_VertexCount / 3 && m_VertexCount / 3 < m_Maximum)
-	{
-		//std::cout << "Adding vertex..." << std::endl;
-		memcpy_s(m_Vertices + m_VertexCount, sizeof(GLfloat) * 3, NewVertex, sizeof(GLfloat) * 3);
-		memcpy_s(m_Normals + m_VertexCount, sizeof(GLfloat) * 3, NewNormal, sizeof(GLfloat) * 3);
-		memcpy_s(m_TextureVertices + (m_VertexCount / 3) * 2, sizeof(GLfloat) * 2, NewTextureVertex, sizeof(GLfloat) * 2);
-
-		m_Indices[m_IndexCount] = m_VertexCount / 3;
-		m_IndexCount++;
-		m_VertexCount += 3;
-	}
-}
-
-void CTriangleMesh::AddTriangle(CVector4 Vertices[3], CVector4 Normals[3], GLfloat TextureVertices[6])
-{
-	for (GLuint i = 0; i < 3; i++)
-		AddIndex(Vertices[i], Normals[i], &TextureVertices[i * 2]);
-}
 
 void CTriangleMesh::End(void)
 {

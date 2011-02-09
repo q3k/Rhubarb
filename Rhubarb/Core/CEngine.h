@@ -87,6 +87,8 @@ namespace rb
 			CTimer *m_Timer;			
 			CCamera *m_Camera;
 
+			CTimer m_FPSTimer;
+
 			unsigned int m_Width;
 			unsigned int m_Height;
 

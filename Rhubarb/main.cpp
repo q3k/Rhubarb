@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 	Camera.SetPosition(0.0f, 20.0f, 45.0f);
 	Camera.LookAt(rb::CVector4(0.0f, 5.0f, 0.0f));
 
-	g_Engine->SetClearColor(0.1f, 0.1f, 0.1f);
+	g_Engine->SetClearColor(0.05f, 0.05f, 0.05f);
 	g_Engine->SetRenderFunction(fnRender);
 	g_Engine->SetCamera(&Camera);
 	g_Engine->Start();

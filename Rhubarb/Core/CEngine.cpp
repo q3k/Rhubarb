@@ -21,6 +21,8 @@
 using namespace rb;
 
 #include <iostream>
+#include <sstream>
+#include <Windows.h>
 
 CEngine *CEngine::Get(void)
 {
@@ -75,6 +77,11 @@ void CEngine::Initialize(unsigned int Width, unsigned int Height, std::string Wi
 	if (Error != GLEW_OK)
 		Fatal(std::string("GLEW Error: ") + (char *)glewGetErrorString(Error));
 
+	if (!GLEW_VERSION_2_1)
+		Fatal(std::string("Sorry, but you need OpenGL 2.1!"));
+
+	//Fatal(std::string("lol"));
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
@@ -82,6 +89,8 @@ void CEngine::Initialize(unsigned int Width, unsigned int Height, std::string Wi
 	m_TextureManager = new CTextureManager();
 	m_MatrixManager = new CMatrixManager();
 	m_Timer = new CTimer();
+
+	m_FPSTimer.Start();
 }
 
 void CEngine::GetManagers(CMatrixManager **MatrixManager, CShaderManager **ShaderManager, CTextureManager **TextureManager)
@@ -108,6 +117,8 @@ void CEngine::ChangeSizeFunction(int Width, int Height)
 
 void CEngine::RenderFunction(void)
 {
+	static unsigned int Frames = 0;
+
 	if (m_Camera)
 		m_MatrixManager->Push(*m_Camera);
 	else
@@ -120,10 +131,23 @@ void CEngine::RenderFunction(void)
 		bool Result = m_ClientRenderFunction(m_Timer->GetElapsedSeconds());
 		if (!Result)
 		{
-			Log("Terminating main loop...");
+			Log("Terminating main loop...\n");
 			glutLeaveMainLoop();
 		}
 	}
+
+	if (m_FPSTimer.GetElapsedSeconds() > 1.0f)
+	{
+		std::stringstream FPSData;
+		FPSData << Frames / m_FPSTimer.GetElapsedSeconds();
+		FPSData << " FPS\n";
+		Log(FPSData.str());
+
+		m_FPSTimer.Start();
+		Frames = 0;
+	}
+
+	Frames++;
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -167,7 +191,9 @@ void CEngine::Error(std::string Message)
 void CEngine::Fatal(std::string Message)
 {
 	std::cerr << "[e] " << Message;
-	throw Exception::FatalException(Message);
+	MessageBoxA(0, Message.c_str(), "Fatal error", 0);
+	//throw Exception::FatalException(Message);
+	exit(0);
 }
 
 void CEngine::Start(void)

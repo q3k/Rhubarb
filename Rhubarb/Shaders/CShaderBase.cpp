@@ -119,7 +119,15 @@ void CShaderBase::Initialize(void)
 	glGetProgramiv(m_Program, GL_COMPILE_STATUS, &Test);
 
     if (Test == GL_FALSE)
-		throw Exception::ShaderCompileException("Could not link shader program!");
+	{
+		GLint Length;
+		glGetProgramiv(m_Program, GL_INFO_LOG_LENGTH, &Length);
+		
+		GLchar *Error = new GLchar[Length];
+		glGetProgramInfoLog(m_Program, Length, NULL, Error);
+
+		throw Exception::ShaderCompileException("Could not link shader program! " + std::string(Error));
+	}
 
 	glDeleteShader(VertexShader);
 	glDeleteShader(FragmentShader);
