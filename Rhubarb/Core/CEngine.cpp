@@ -77,8 +77,8 @@ void CEngine::Initialize(unsigned int Width, unsigned int Height, std::string Wi
 	if (Error != GLEW_OK)
 		Fatal(std::string("GLEW Error: ") + (char *)glewGetErrorString(Error));
 
-	if (!GLEW_VERSION_2_1)
-		Fatal(std::string("Sorry, but you need OpenGL 2.1!"));
+	if (!GLEW_VERSION_3_0)
+		Fatal(std::string("Sorry, but you need OpenGL 3.0!"));
 
 	//Fatal(std::string("lol"));
 
