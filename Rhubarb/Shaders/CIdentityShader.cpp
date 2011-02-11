@@ -17,6 +17,7 @@
 **
 ************************************************************************/
 
+#include "Core/Platform.h"
 #include "Shaders/CIdentityShader.h"
 
 #include <string>
@@ -24,7 +25,7 @@
 #include <assert.h>
 
 #include <GL/glew.h>
-#include <GL/GL.h>
+#include <GL/gl.h>
 
 using namespace rb;
 

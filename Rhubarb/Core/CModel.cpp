@@ -34,7 +34,7 @@ CModel::CModel(void)
 	m_Mesh = 0;
 	m_Shader = 0;
 
-	CEntity::CEntity();
+	CEntity();
 
 	m_Shininess = 128.0f;
 }
@@ -44,7 +44,7 @@ void CModel::Load(std::string Filename)
 	CEngine::Get()->GetManagers(&m_MatrixManager, 0, &m_TextureManager);
 
 	std::ifstream File;
-	File.open(Filename, std::ios::in);
+	File.open(Filename.c_str(), std::ios::in);
 
 	std::string Keyword;
 
@@ -140,7 +140,8 @@ void CModel::Draw(void)
 		m_MatrixManager->Push();
 		m_MatrixManager->Multiply(GetMatrix());
 
-		m_Shader->Use(m_MatrixManager->GetMV(), m_MatrixManager->GetMVP(), CVector4(100.0f, 50.0f, 70.0f), m_Ambient, m_Diffuse, m_Shininess);
+		CVector4 LightVector(100.0f, 50.0f, 70.0f);
+		m_Shader->Use(m_MatrixManager->GetMV(), m_MatrixManager->GetMVP(), LightVector, m_Ambient, m_Diffuse, m_Shininess);
 
 		if (m_HasTexture)
 			glBindTexture(GL_TEXTURE_2D, m_Texture);

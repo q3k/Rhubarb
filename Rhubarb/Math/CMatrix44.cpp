@@ -17,6 +17,7 @@
 **
 ************************************************************************/
 
+#include "Core/Platform.h"
 #include "Math/CMatrix44.h"
 using namespace rb;
 

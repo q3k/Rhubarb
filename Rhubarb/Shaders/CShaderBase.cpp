@@ -116,7 +116,7 @@ void CShaderBase::Initialize(void)
 	glLinkProgram(m_Program);
 
 	GLint Test;
-	glGetProgramiv(m_Program, GL_COMPILE_STATUS, &Test);
+	glGetProgramiv(m_Program, GL_LINK_STATUS, &Test);
 
     if (Test == GL_FALSE)
 	{

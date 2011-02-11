@@ -20,6 +20,7 @@
 #pragma once
 #include "Shaders/CShaderBase.h"
 
+#include "Core/Platform.h"
 #include "Math/CMatrix44.h"
 
 namespace rb

@@ -22,7 +22,13 @@ using namespace rb;
 
 #include <iostream>
 #include <sstream>
+
+#ifdef _WIN32
 #include <Windows.h>
+#else
+extern int __argc;
+extern char **__argv;
+#endif
 
 CEngine *CEngine::Get(void)
 {
@@ -191,7 +197,9 @@ void CEngine::Error(std::string Message)
 void CEngine::Fatal(std::string Message)
 {
 	std::cerr << "[e] " << Message;
+#ifdef _WIN32
 	MessageBoxA(0, Message.c_str(), "Fatal error", 0);
+#endif
 	//throw Exception::FatalException(Message);
 	exit(0);
 }

@@ -17,8 +17,20 @@
 **
 ************************************************************************/
 
-//Just include EVERYTHING
+// Use from client application ONLY
+// Just include EVERYTHING
 
+#ifndef __RB_EXTERNAL_ARGS__
+#define __RB_EXTERNAL_ARGS__
+
+int __argc;
+char **__argv;
+
+#define RB_PARSE_ARGUMENTS(c, v) __argc = c; __argv = v;
+
+#endif
+
+#include "Core/Platform.h"
 #include "Core/CEngine.h"
 
 #include "Core/CCamera.h"

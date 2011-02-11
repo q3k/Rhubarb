@@ -45,13 +45,16 @@ bool fnRender(float DeltaTime)
 
 int main(int argc, char **argv)
 {
+	RB_PARSE_ARGUMENTS(argc, argv);
 	g_Engine->Initialize(800, 600, "Rhubarb Demo");
 
 	Model.Load("Data/teapot.model");
 	Text.Load("Data/text.model");
-
+	
 	Camera.SetPosition(0.0f, 20.0f, 45.0f);
-	Camera.LookAt(rb::CVector4(0.0f, 5.0f, 0.0f));
+
+    rb::CVector4 LookTarget(0.0f, 5.0f, 0.0f);
+	Camera.LookAt(LookTarget);
 
 	g_Engine->SetClearColor(0.05f, 0.05f, 0.05f);
 	g_Engine->SetRenderFunction(fnRender);

@@ -20,6 +20,7 @@
 #include "Helpers/CTextureManager.h"
 using namespace rb;
 
+#include "Core/Platform.h"
 #include "Core/CEngine.h"
 
 #include <fstream>
@@ -36,7 +37,7 @@ TTexture CTextureManager::GetTexture(std::string Name)
 		return m_Textures[Name];
 
 	std::ifstream File;
-	File.open(Name, std::ios::in | std::ios::binary);
+	File.open(Name.c_str(), std::ios::in | std::ios::binary);
 
 	if (!File.is_open())
 		throw Exception::TextureManagerException("Error opening texture file.");

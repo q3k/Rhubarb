@@ -18,6 +18,9 @@
 ************************************************************************/
 
 #include "Shaders/CPhongShader.h"
+
+#include "Core/Platform.h"
+
 #include <string>
 #include <cassert>
 

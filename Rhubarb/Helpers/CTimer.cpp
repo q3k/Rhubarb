@@ -7,7 +7,7 @@ CTimer::CTimer(void)
 	QueryPerformanceFrequency(&m_Frequency);
 	QueryPerformanceCounter(&m_Last);
 #else
-	gettimeofday(&m_LastCount, 0);
+	gettimeofday(&m_Last, 0);
 #endif
 }
 

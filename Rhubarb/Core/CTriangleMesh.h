@@ -20,11 +20,13 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <GL/GL.h>
+#include <GL/gl.h>
 
+#include "Core/Platform.h"
 #include "Math/CVector4.h"
 
 #include <string>
+#include <cmath>
 
 namespace rb
 {
@@ -36,50 +38,8 @@ namespace rb
 
 			//Automatic detection of duplicate vertices, immediate mode
 			void Begin(GLint NumberVertices);
-
-			inline void AddIndex(CVector4 &Vertex, CVector4 &Normal, GLfloat NewTextureVertex[2])
-			{
-				GLfloat *NewVertex = Vertex.m_Data;
-
-				CVector4 NormalizedNormal;
-				Normal.Normalize(NormalizedNormal);
-				GLfloat *NewNormal = NormalizedNormal.m_Data;
-
-				//each vertex from current vertex list.
-				GLuint j = 0;
-				for (j = 0; j < m_VertexCount / 3; j++)
-				{
-					GLfloat *OldVertex = m_Vertices + j * 3;
-					GLfloat *OldNormal = m_Normals + j * 3;
-					GLfloat *OldTextureVertex = m_TextureVertices + j * 2;
-
-					if (CompareVectors(NewVertex, OldVertex) &&
-						CompareVectors(NewNormal, OldNormal) &&
-						CompareTextureVertices(NewTextureVertex, OldTextureVertex))
-					{
-						m_Indices[m_IndexCount] = j;
-						m_IndexCount++;
-						break;
-					}
-				}
-
-				if (j == m_VertexCount / 3 && m_VertexCount / 3 < m_Maximum)
-				{
-					//std::cout << "Adding vertex..." << std::endl;
-					memcpy_s(m_Vertices + m_VertexCount, sizeof(GLfloat) * 3, NewVertex, sizeof(GLfloat) * 3);
-					memcpy_s(m_Normals + m_VertexCount, sizeof(GLfloat) * 3, NewNormal, sizeof(GLfloat) * 3);
-					memcpy_s(m_TextureVertices + (m_VertexCount / 3) * 2, sizeof(GLfloat) * 2, NewTextureVertex, sizeof(GLfloat) * 2);
-
-					m_Indices[m_IndexCount] = m_VertexCount / 3;
-					m_IndexCount++;
-					m_VertexCount += 3;
-				}
-			}
-			inline void CTriangleMesh::AddTriangle(CVector4 Vertices[3], CVector4 Normals[3], GLfloat TextureVertices[6])
-{
-	for (GLuint i = 0; i < 3; i++)
-		AddIndex(Vertices[i], Normals[i], &TextureVertices[i * 2]);
-}
+			void AddIndex(CVector4 &Vertex, CVector4 &Normal, GLfloat NewTextureVertex[2]);
+			void AddTriangle(CVector4 Vertices[3], CVector4 Normals[3], GLfloat TextureVertices[6]);
 			void End(void);
 
 			//Direct index and vertex list
@@ -105,21 +65,21 @@ namespace rb
 			GLuint m_NormalArray;
 			GLuint m_TextureVertexArray;
 
-			inline bool CTriangleMesh::CompareVectors(GLfloat *VertexA, GLfloat *VertexB)
+			inline bool CompareVectors(GLfloat *VertexA, GLfloat *VertexB)
 			{
 				const GLfloat Error = 0.0001f;
-				if (abs(VertexA[0]  - VertexB[0]) <= Error &&
-					abs(VertexA[1]  - VertexB[1]) <= Error &&
-					abs(VertexA[2]  - VertexB[2]) <= Error)
+				if (std::abs(VertexA[0]  - VertexB[0]) <= Error &&
+					std::abs(VertexA[1]  - VertexB[1]) <= Error &&
+					std::abs(VertexA[2]  - VertexB[2]) <= Error)
 					return true;
 				else
 					return false;
 			}
-			inline bool CTriangleMesh::CompareTextureVertices(GLfloat *VertexA, GLfloat *VertexB)
+			inline bool CompareTextureVertices(GLfloat *VertexA, GLfloat *VertexB)
 			{
 				const GLfloat Error = 0.0001f;
-				if (abs(VertexA[0]  - VertexB[0]) <= Error &&
-					abs(VertexA[1]  - VertexB[1]) <= Error)
+				if (std::abs(VertexA[0]  - VertexB[0]) <= Error &&
+					std::abs(VertexA[1]  - VertexB[1]) <= Error)
 					return true;
 				else
 					return false;

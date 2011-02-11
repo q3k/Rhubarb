@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <string.h>
 
+#include "Core/Platform.h"
 #include "Helpers/CMatrixManager.h"
 using namespace rb;
 
@@ -95,7 +96,7 @@ void CMatrixManager::Pop(void)
 
 bool CMatrixManager::CanAllocate(void)
 {
-	return (((unsigned int)m_StackPointer - (unsigned int)m_StackBottom) <= m_MaxSize * 64 - 64);
+	return ((m_StackPointer - m_StackBottom) <= m_MaxSize * 64 - 64);
 }
 
 void CMatrixManager::Multiply(CMatrix44 &Matrix)

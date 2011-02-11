@@ -38,7 +38,7 @@ void CObjReader::Read(CTriangleMesh &Target)
 {
 	std::cout << "[i] Reading .obj file " << m_Filename << "..." << std::endl;
 	std::ifstream File;
-	File.open(m_Filename, std::ios::binary | std::ios::in);
+	File.open(m_Filename.c_str(), std::ios::binary | std::ios::in);
 
 	if (!File.is_open())
 		throw Exception::ObjReaderException("Can not open file.");
