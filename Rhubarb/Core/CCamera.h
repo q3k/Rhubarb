@@ -19,12 +19,11 @@
 
 #pragma once
 
-#include <GL/glew.h>
-#include <GL/gl.h>
-
 #include "Core/CEntity.h"
 #include "Math/CMatrix44.h"
 #include "Math/CVector4.h"
+
+#include <GL/glew.h>
 
 namespace rb
 {

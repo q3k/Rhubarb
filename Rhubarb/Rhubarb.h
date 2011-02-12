@@ -23,8 +23,10 @@
 #ifndef __RB_EXTERNAL_ARGS__
 #define __RB_EXTERNAL_ARGS__
 
+#ifndef _WIN32
 int __argc;
 char **__argv;
+#endif
 
 #define RB_PARSE_ARGUMENTS(c, v) __argc = c; __argv = v;
 

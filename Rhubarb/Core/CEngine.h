@@ -19,11 +19,7 @@
 
 #pragma once
 
-#define GLEW_STATIC
-
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-
+#include "Core/CGLContext.h"
 #include "Core/CCamera.h"
 #include "Helpers/CMatrixManager.h"
 #include "Helpers/CTextureManager.h"
@@ -75,12 +71,11 @@ namespace rb
 			CEngine(void);
 			~CEngine(void);
 
+			CGLContext *m_Context;
+
 			static CEngine *m_Singleton;
 			static bool m_Spawned;
 			static bool m_Initialized;
-			static void m_sRenderFunction(void);
-			static void m_sChangeSizeFunction(int Width, int Height);
-			static void m_sMouseMotionFunction(int X, int Y);
 
 			CMatrixManager *m_MatrixManager;
 			CTextureManager *m_TextureManager;
@@ -92,12 +87,16 @@ namespace rb
 
 			unsigned int m_Width;
 			unsigned int m_Height;
+			bool m_LimitFPS;
+			float m_FPSMax;
 
 			std::string m_WindowName;
 
 			TRenderFunction m_ClientRenderFunction;
+			
+			static void m_sResizeFunction(int Width, int Height);
 
-			void RenderFunction(void);
+			bool RenderFunction(void);
 			void ChangeSizeFunction(int Width, int Height);		
 			void MouseMotionFunction(int X, int Y);
 	};

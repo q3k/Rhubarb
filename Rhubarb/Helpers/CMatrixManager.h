@@ -19,14 +19,13 @@
 
 #pragma once
 
-#include <GL/glew.h>
-#include <GL/gl.h>
-
 #include <exception>
 #include <string>
 
 #include "Math/CMatrix44.h"
 #include "Core/CCamera.h"
+
+#include <GL/glew.h>
 
 namespace rb
 {

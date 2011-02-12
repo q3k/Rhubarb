@@ -73,8 +73,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\CGLContext.h" />
     <ClInclude Include="Core\CEngine.h" />
     <ClInclude Include="Core\CCamera.h" />
+    <ClInclude Include="Core\Platform.h" />
     <ClInclude Include="Helpers\CShaderManager.h" />
     <ClInclude Include="Helpers\CTimer.h" />
     <ClInclude Include="Rhubarb.h" />
@@ -94,6 +96,7 @@
     <ClInclude Include="Math\CVector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\CGLContext.cpp" />
     <ClCompile Include="Core\CEngine.cpp" />
     <ClCompile Include="Core\CCamera.cpp" />
     <ClCompile Include="Helpers\CShaderManager.cpp" />

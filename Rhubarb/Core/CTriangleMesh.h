@@ -19,11 +19,10 @@
 
 #pragma once
 
-#include <GL/glew.h>
-#include <GL/gl.h>
-
 #include "Core/Platform.h"
 #include "Math/CVector4.h"
+
+#include <GL/glew.h>
 
 #include <string>
 #include <cmath>

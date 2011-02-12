@@ -70,23 +70,11 @@ void CEngine::Initialize(unsigned int Width, unsigned int Height, std::string Wi
 	m_WindowName = WindowName;
 	m_Width = Width;
 	m_Height = Height;
+	m_LimitFPS = true;
+	m_FPSMax = 60.0f;
 
-	glutInit(&__argc, __argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
-	glutInitWindowSize(Width, Height);
-	glutCreateWindow(m_WindowName.c_str());
-	glutReshapeFunc(m_sChangeSizeFunction);
-	glutDisplayFunc(m_sRenderFunction);
-	glutMotionFunc(m_sMouseMotionFunction);
-
-	GLenum Error = glewInit();
-	if (Error != GLEW_OK)
-		Fatal(std::string("GLEW Error: ") + (char *)glewGetErrorString(Error));
-
-	if (!GLEW_VERSION_3_0)
-		Fatal(std::string("Sorry, but you need OpenGL 3.0!"));
-
-	//Fatal(std::string("lol"));
+	m_Context = new CGLContext(WindowName, Width, Height);
+	m_Context->SetResizeFunction(m_sResizeFunction);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -97,6 +85,11 @@ void CEngine::Initialize(unsigned int Width, unsigned int Height, std::string Wi
 	m_Timer = new CTimer();
 
 	m_FPSTimer.Start();
+}
+
+void CEngine::m_sResizeFunction(int Width, int Height)
+{
+	CEngine::Get()->ChangeSizeFunction(Width, Height);
 }
 
 void CEngine::GetManagers(CMatrixManager **MatrixManager, CShaderManager **ShaderManager, CTextureManager **TextureManager)
@@ -111,17 +104,13 @@ void CEngine::GetManagers(CMatrixManager **MatrixManager, CShaderManager **Shade
 		*TextureManager = m_TextureManager;
 }
 
-void CEngine::m_sChangeSizeFunction(int Width, int Height) { m_Singleton->ChangeSizeFunction(Width, Height); }
-void CEngine::m_sRenderFunction(void) { m_Singleton->RenderFunction(); }
-void CEngine::m_sMouseMotionFunction(int X, int Y) { m_Singleton->MouseMotionFunction(X, Y); };
-
 void CEngine::ChangeSizeFunction(int Width, int Height)
 {
 	glViewport(0, 0, Width, Height);
 	m_MatrixManager->SetPerspective(rbDegToRad(35.0f), float(Width)/float(Height), 1.0f, 1000.0f);
 }
 
-void CEngine::RenderFunction(void)
+bool CEngine::RenderFunction(void)
 {
 	static unsigned int Frames = 0;
 
@@ -138,11 +127,11 @@ void CEngine::RenderFunction(void)
 		if (!Result)
 		{
 			Log("Terminating main loop...\n");
-			glutLeaveMainLoop();
+			return false;
 		}
 	}
 
-	if (m_FPSTimer.GetElapsedSeconds() > 1.0f)
+	if (m_FPSTimer.GetElapsedSeconds() > 5.0f)
 	{
 		std::stringstream FPSData;
 		FPSData << Frames / m_FPSTimer.GetElapsedSeconds();
@@ -155,12 +144,12 @@ void CEngine::RenderFunction(void)
 
 	Frames++;
 
-	glutSwapBuffers();
-	glutPostRedisplay();
+	m_Context->Flip();
 
 	m_MatrixManager->Pop();
-
 	m_Timer->Start();
+
+	return true;
 }
 
 void CEngine::MouseMotionFunction(int X, int Y)
@@ -199,20 +188,55 @@ void CEngine::Fatal(std::string Message)
 	std::cerr << "[e] " << Message;
 #ifdef _WIN32
 	MessageBoxA(0, Message.c_str(), "Fatal error", 0);
-#endif
-	//throw Exception::FatalException(Message);
 	exit(0);
+#else
+	throw Exception::FatalException(Message);
+#endif
 }
 
 void CEngine::Start(void)
 {
 	Log("Entering render loop...\n");
 
-	glutMainLoop();
+	//Hack!
+	ChangeSizeFunction(m_Width, m_Height);
+
+	CTimer Timer;
+	while(1)
+	{
+		Timer.Start();
+
+		if (!m_Context->GetOpen())
+			break;
+
+		m_Context->ProcessEvents();
+		bool Result = RenderFunction();
+
+		float RenderTime = Timer.GetElapsedSeconds();
+		
+		if (!Result)
+			break;
+
+		if (m_LimitFPS)
+		{
+			float FrameTime = 1.0f / m_FPSMax;
+
+			float TimeLeft = FrameTime - RenderTime;
+
+			if (TimeLeft > 0.0f)
+			{
+#ifdef _WIN32
+				DWORD Time = (DWORD)(TimeLeft * 1000);
+				Sleep(Time);
+#endif
+			}			
+		}
+	}
 }
 
 CEngine::~CEngine(void)
 {
+	delete m_Context;
 }
 
 bool CEngine::m_Spawned = false;

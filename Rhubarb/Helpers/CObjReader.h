@@ -23,10 +23,9 @@
 #include <vector>
 #include <exception>
 
-#include <GL/glew.h>
-#include <GL/gl.h>
-
 #include "Core/CTriangleMesh.h"
+
+#include <GL/glew.h>
 
 namespace rb
 {

@@ -17,14 +17,45 @@
 **
 ************************************************************************/
 
-// Platform-specific stuff
-// (mostly dirty fixes to get this to play nice with gcc
-
 #pragma once
 
-#include <string.h>
+#define GLEW_STATIC
+#include <GL/glew.h>
 
-#ifndef _WIN32
-	#define memcpy_s(a, b, c, d) memcpy(a, c, d)
-	#define strncpy_s(a, b, c, d) strncpy(a, c, d)
+#include <string>
+#ifdef _WIN32
+#include <Windows.h>
 #endif
+
+namespace rb
+{
+	typedef void(*TResizeFunction)(int, int);
+
+	class CGLContext
+	{
+		public:
+			CGLContext(std::string Title, unsigned int Width, unsigned int Heightm);
+			~CGLContext(void);
+
+			void Flip(void);
+			void ProcessEvents(void);
+			bool GetOpen(void);
+
+			void SetResizeFunction(TResizeFunction Function);
+		private:
+			bool m_Open;
+			unsigned int m_Width;
+			unsigned int m_Height;
+			TResizeFunction m_ResizeFunction;
+
+#ifdef _WIN32
+			HWND m_Window;
+			HDC m_DC;
+			HGLRC m_Context;
+
+			LRESULT HandleWindowEvent(UINT Message, WPARAM wParam, LPARAM lParam);
+			static LRESULT CALLBACK WindowEvent(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
+#endif
+	};
+};
+
