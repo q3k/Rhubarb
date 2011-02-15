@@ -24,7 +24,7 @@
 
 rb::CEngine *g_Engine = rb::CEngine::Get();
 rb::CModel Model;
-rb::CModel Text;
+//rb::CModel Text;
 rb::CCamera Camera;
 
 bool fnRender(float DeltaTime)
@@ -32,13 +32,13 @@ bool fnRender(float DeltaTime)
 	static float Color = 0.0f;
 	Color += DeltaTime;
 
-	Model.RotateWorld(rbDegToRad(DeltaTime * 100), 0.0f, 1.0f, 0.0f);
-	Text.RotateWorld(-rbDegToRad(DeltaTime * 100), 0.0f, 1.0f, 0.0f);
+	Model.RotateLocal(rbDegToRad(DeltaTime * 100), 0.0f, 1.0f, 0.0f);
+	//Text.RotateWorld(-rbDegToRad(DeltaTime * 100), 0.0f, 1.0f, 0.0f);
 
-	Text.SetDiffuseColor((sinf(Color) / 2.0f) + 0.5f, (sinf(Color + 2.094f) / 2.0f) + 0.5f, (sinf(Color + 4.188f) / 2.0f) + 0.5f, 1.0f);
+	//Text.SetDiffuseColor((sinf(Color) / 2.0f) + 0.5f, (sinf(Color + 2.094f) / 2.0f) + 0.5f, (sinf(Color + 4.188f) / 2.0f) + 0.5f, 1.0f);
 
 	Model.Draw();
-	Text.Draw();
+	//Text.Draw();
 
 	return true;
 }
@@ -48,12 +48,13 @@ int main(int argc, char **argv)
 	RB_PARSE_ARGUMENTS(argc, argv);
 	g_Engine->Initialize(800, 600, "Rhubarb Demo");
 
-	Model.Load("Data/teapot.model");
-	Text.Load("Data/text.model");
+	Model.Load("Data/japanknife.model");
+	//Text.Load("Data/text.model");
+	Model.RotateLocal(rbDegToRad(45.0f), 0.0f, 0.0f, 1.0f);
 	
-	Camera.SetPosition(0.0f, 20.0f, 45.0f);
+	Camera.SetPosition(0.0f, 14.0f, 20.0f);
 
-    rb::CVector4 LookTarget(0.0f, 5.0f, 0.0f);
+    rb::CVector4 LookTarget(-2.0f, 4.0f, 0.0f);
 	Camera.LookAt(LookTarget);
 
 	g_Engine->SetClearColor(0.05f, 0.05f, 0.05f);

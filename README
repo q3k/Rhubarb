@@ -1,3 +1,35 @@
-Rhubarb is a 'project' 3d engine I've been working on.
+Rhubarb is a 'project' 3D engine I (Sergiusz Bazanski) have been working on.
+Unless you're curious about ugly C++ code, I'd stay away from it. :D
 
-Its aim is to use OpenGL 3.0 as fully as possible, without deprecated features and unnecessary bloat.
+Sample screenshot: http://i.imgur.com/8Wtxn.png
+
+Main ideas:
+	o Based on OpenGL 3.0 core context, meaning no deprecated calls used
+	  whatsoever (and that is a Good Thing).
+	  
+	o As tiny as possible, aiming to be not dependant on any other library. Right
+	  now it still requires GLEW, but I'm getting rid of it soon.
+	  
+	o Portable, at least in theory. Linux context creation is coming sooon.
+	
+	o Does not get in your way - you can use as much or as little stock classes
+	  as you want. The default collection tries to hide details like shader
+	  compilation and texture loading away from you, but if you want you can
+	  start issuing OpenGL calls like it's 1999.
+	
+	o Not a Game-specific engine - if you want that, go play with Ogre3D. We're
+	  here to render stuff, not to write scene managers or physical objects
+	  abstractions. If you want to use this in a game, write this stuff yourself.
+
+Features:
+	o Slow and in places unstable .obj loading, but hey, it works.
+	o Simple to read and write .model formet which specifies mesh, shader and
+	  texture data. New loaders easily writable.
+	o Basic objects included: Entity, Camera, Model.
+
+Requirements:
+	o An OpenGL 3.0 compatible graphics card.
+	o GLEW, either as a static library or a .c source file.
+
+Additional Credits:
+	o Hideous (www.hideou.se) and doeke for the Knife model and textures.

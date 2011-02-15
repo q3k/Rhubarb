@@ -46,6 +46,9 @@ void CModel::Load(std::string Filename)
 	std::ifstream File;
 	File.open(Filename.c_str(), std::ios::in);
 
+	if (!File.is_open())
+		throw Exception::ModelException("Could not open model file!");
+
 	std::string Keyword;
 
 	m_Name = "";
